@@ -21,6 +21,7 @@ export const CURRENCIES = [
     { code: 'GBP', symbol: '£', name: 'British Pound' },
     { code: 'JPY', symbol: '¥', name: 'Japanese Yen' },
     { code: 'INR', symbol: '₹', name: 'Indian Rupee' },
+    { code: 'NPR', symbol: 'Rs', name: 'Nepalese Rupee' },
 ];
 
 // Date formats

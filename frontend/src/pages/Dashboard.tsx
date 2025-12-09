@@ -3,37 +3,91 @@ import DashboardStats from '../components/dashboard/DashboardStats';
 import AnalyticsDashboard from '../components/dashboard/AnalyticsDashboard';
 import ExportModal from '../components/transactions/ExportModal';
 import ImportModal from '../components/transactions/ImportModal';
-import { DownloadIcon, UploadIcon } from 'lucide-react';
-
-// Mock Data for visualization until API is connected
-const MOCK_STATS = {
-    totalBalance: 12500.50,
-    monthlyIncome: 4500.00,
-    monthlyExpenses: 2100.00,
-};
-
-const MOCK_SPENDING = [
-    { name: 'Food', value: 400, color: '#0088FE' },
-    { name: 'Transport', value: 300, color: '#00C49F' },
-    { name: 'Utilities', value: 200, color: '#FFBB28' },
-    { name: 'Entertainment', value: 150, color: '#FF8042' },
-];
+import { DownloadIcon, UploadIcon, RefreshCwIcon } from 'lucide-react';
+import {
+    useGetDashboardOverviewQuery,
+    useGetSpendingByCategoryQuery
+} from '../store/api/dashboardApi';
+import {
+    useExportTransactionsMutation,
+    useImportTransactionsMutation
+} from '../store/api/transactionsApi';
 
 const Dashboard: React.FC = () => {
     const [isExportModalOpen, setIsExportModalOpen] = useState(false);
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
+    // API Hooks
+    const {
+        data: stats,
+        isLoading: isStatsLoading,
+        refetch: refetchStats
+    } = useGetDashboardOverviewQuery();
+
+    const {
+        data: spending,
+        isLoading: isSpendingLoading,
+        refetch: refetchSpending
+    } = useGetSpendingByCategoryQuery();
+
+    const [exportTransactions, { isLoading: isExporting }] = useExportTransactionsMutation();
+    const [importTransactions, { isLoading: isImporting }] = useImportTransactionsMutation();
+
     // Handlers
-    const handleExport = (format: 'json' | 'csv') => {
-        console.log(`Exporting in ${format} format...`);
-        // Logic to call API or trigger download would go here
-        setIsExportModalOpen(false);
+    const handleExport = async (format: 'json' | 'csv') => {
+        try {
+            const blob = await exportTransactions(format).unwrap();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transactions.${format}`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            setIsExportModalOpen(false);
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert('Failed to export transactions. Please try again.');
+        }
     };
 
-    const handleImport = (file: File) => {
-        console.log(`Importing file: ${file.name}`);
-        // Logic to upload file would go here
-        setIsImportModalOpen(false);
+    const handleImport = async (file: File) => {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            await importTransactions(formData).unwrap();
+            // Refresh data after successful import
+            refetchStats();
+            refetchSpending();
+            setIsImportModalOpen(false);
+            alert('Transactions imported successfully!');
+        } catch (error) {
+            console.error('Import failed:', error);
+            alert('Failed to import transactions. Please check the file format.');
+        }
+    };
+
+    const handleRefresh = () => {
+        refetchStats();
+        refetchSpending();
+    };
+
+    if (isStatsLoading || isSpendingLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+            </div>
+        );
+    }
+
+    // Default empty values if data is missing
+    const dashboardStats = stats || {
+        total_balance: 0,
+        monthly_income: 0,
+        monthly_expenses: 0,
+        account_count: 0,
+        net_monthly: 0
     };
 
     return (
@@ -47,6 +101,14 @@ const Dashboard: React.FC = () => {
                         </h2>
                     </div>
                     <div className="mt-4 flex md:mt-0 md:ml-4 space-x-3">
+                        <button
+                            type="button"
+                            className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                            onClick={handleRefresh}
+                        >
+                            <RefreshCwIcon className="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                            Refresh
+                        </button>
                         <button
                             type="button"
                             className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
@@ -70,12 +132,19 @@ const Dashboard: React.FC = () => {
                 <div className="space-y-8">
                     {/* Stats Section */}
                     <section>
-                        <DashboardStats {...MOCK_STATS} />
+                        <DashboardStats
+                            totalBalance={dashboardStats.total_balance}
+                            monthlyIncome={dashboardStats.monthly_income}
+                            monthlyExpenses={dashboardStats.monthly_expenses}
+                        />
                     </section>
 
                     {/* Analytics Section */}
                     <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <AnalyticsDashboard spendingByCategory={MOCK_SPENDING} monthlyTrends={[]} />
+                        <AnalyticsDashboard
+                            spendingByCategory={spending || []}
+                            monthlyTrends={[]}
+                        />
                         {/* Placeholder for Recent Transactions List */}
                         <div className="bg-white shadow rounded-lg p-6">
                             <h3 className="text-lg font-medium text-gray-900 mb-4">Recent Transactions</h3>

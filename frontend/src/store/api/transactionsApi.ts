@@ -53,6 +53,22 @@ export const transactionsApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['Transaction', 'Account', 'Dashboard'],
         }),
+        importTransactions: builder.mutation<void, FormData>({
+            query: (data) => ({
+                url: '/transactions/import',
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['Transaction', 'Account', 'Dashboard'],
+        }),
+        exportTransactions: builder.mutation<Blob, string>({
+            query: (format) => ({
+                url: `/transactions/export?format=${format}`,
+                method: 'GET',
+                responseHandler: (response) => response.blob(),
+                cache: 'no-cache',
+            }),
+        }),
     }),
 });
 
@@ -62,4 +78,6 @@ export const {
     useCreateTransactionMutation,
     useUpdateTransactionMutation,
     useDeleteTransactionMutation,
+    useImportTransactionsMutation,
+    useExportTransactionsMutation,
 } = transactionsApi;

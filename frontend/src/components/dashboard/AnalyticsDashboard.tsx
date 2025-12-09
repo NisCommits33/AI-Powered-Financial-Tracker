@@ -13,14 +13,10 @@ import {
     Cell,
 } from 'recharts';
 
-interface CategoryData {
-    name: string;
-    value: number;
-    color: string;
-}
+import { CategorySpending } from '../../types';
 
 interface AnalyticsDashboardProps {
-    spendingByCategory: CategoryData[];
+    spendingByCategory: CategorySpending[];
     monthlyTrends: any[]; // Placeholder for trend data if available
 }
 
@@ -41,10 +37,10 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                                 cx="50%"
                                 cy="50%"
                                 labelLine={false}
-                                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                label={({ category_name, percent }) => `${category_name} ${(percent * 100).toFixed(0)}%`}
                                 outerRadius={80}
                                 fill="#8884d8"
-                                dataKey="value"
+                                dataKey="amount"
                             >
                                 {spendingByCategory.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
