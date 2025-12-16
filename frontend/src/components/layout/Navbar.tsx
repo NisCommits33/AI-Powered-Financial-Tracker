@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Receipt, Wallet, PieChart, LogOut } from 'lucide-react';
+import { LayoutDashboard, Receipt, Wallet, PieChart, LogOut, Tag } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +21,7 @@ const Navbar: React.FC = () => {
         { path: '/transactions', label: 'Transactions', icon: Receipt },
         { path: '/accounts', label: 'Accounts', icon: Wallet },
         { path: '/budgets', label: 'Budgets', icon: PieChart },
+        { path: '/categories', label: 'Categories', icon: Tag },
     ];
 
     return (
@@ -40,8 +41,8 @@ const Navbar: React.FC = () => {
                                         key={item.path}
                                         to={item.path}
                                         className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
-                                                ? 'bg-blue-50 text-blue-700'
-                                                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                                            ? 'bg-blue-50 text-blue-700'
+                                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                                             }`}
                                     >
                                         <Icon className="w-4 h-4 mr-2" />
@@ -52,7 +53,10 @@ const Navbar: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex items-center">
-                        <span className="text-sm text-gray-700 mr-4">{user?.full_name || user?.email}</span>
+                        <Link to="/profile" className="text-sm text-gray-700 mr-4 hover:text-blue-600 font-medium transition-colors">
+                            {user?.full_name || user?.email}
+                        </Link>
+
                         <button
                             onClick={handleLogout}
                             className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md transition-colors"

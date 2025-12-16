@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import type { User, LoginCredentials, RegisterData, AuthResponse } from '@/types';
+import type { User, LoginCredentials, RegisterData, AuthResponse, UserUpdate } from '@/types';
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -28,6 +28,14 @@ export const authApi = baseApi.injectEndpoints({
                 body: data,
             }),
         }),
+        updateProfile: builder.mutation<User, UserUpdate>({
+            query: (data) => ({
+                url: '/auth/me',
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['User'],
+        }),
     }),
 });
 
@@ -36,4 +44,5 @@ export const {
     useRegisterMutation,
     useGetCurrentUserQuery,
     useRefreshTokenMutation,
+    useUpdateProfileMutation,
 } = authApi;

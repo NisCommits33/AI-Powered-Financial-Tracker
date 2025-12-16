@@ -13,7 +13,7 @@ from app.core.security import (
 )
 from app.core.config import settings
 from app.models.user import User
-from app.schemas.user import UserCreate, UserLogin, UserResponse, Token
+from app.schemas.user import UserCreate, UserLogin, UserResponse, Token, UserUpdate
 
 router = APIRouter()
 
@@ -183,3 +183,45 @@ async def refresh_token(
         "refresh_token": new_refresh_token,
         "token_type": "bearer"
     }
+
+
+@router.put("/me", response_model=UserResponse)
+async def update_profile(
+    user_data: UserUpdate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Update current user profile.
+    
+    Args:
+        user_data: User update data
+        current_user: Current authenticated user
+        db: Database session
+        
+    Returns:
+        UserResponse: Updated user data
+        
+    Raises:
+        HTTPException: If email already registered by another user
+    """
+    # If email is being changed, check uniqueness
+    if user_data.email and user_data.email != current_user.email:
+        result = await db.execute(select(User).filter(User.email == user_data.email))
+        existing_user = result.scalar_one_or_none()
+        
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered"
+            )
+            
+    # Update fields
+    update_data = user_data.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(current_user, field, value)
+        
+    await db.commit()
+    await db.refresh(current_user)
+    
+    return current_user

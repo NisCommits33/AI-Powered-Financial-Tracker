@@ -1,62 +1,43 @@
 import React, { useState } from 'react';
-import { Plus, Download, ChevronLeft, ChevronRight } from 'lucide-react';
-import Navbar from '@/components/layout/Navbar';
+import { useGetTransactionsQuery, useCreateTransactionMutation, useUpdateTransactionMutation, useDeleteTransactionMutation, useExportTransactionsMutation } from '@/store/api/transactionsApi';
+import { TransactionCreate, TransactionFilters as ITransactionFilters, TransactionWithDetails } from '@/types';
 import TransactionList from '@/components/transactions/TransactionList';
 import TransactionForm from '@/components/transactions/TransactionForm';
 import TransactionFilters from '@/components/transactions/TransactionFilters';
-import {
-    useGetTransactionsQuery,
-    useCreateTransactionMutation,
-    useUpdateTransactionMutation,
-    useDeleteTransactionMutation,
-    useExportTransactionsMutation,
-} from '@/store/api/transactionsApi';
-import { TransactionCreate, TransactionWithDetails, TransactionFilters as ITransactionFilters } from '@/types';
+import Navbar from '@/components/layout/Navbar';
+import { Download, Plus } from 'lucide-react';
 
 const Transactions: React.FC = () => {
     const [page, setPage] = useState(1);
-    const [filters, setFilters] = useState<ITransactionFilters>({});
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [editingTransaction, setEditingTransaction] = useState<TransactionWithDetails | undefined>();
+    const [editingTransaction, setEditingTransaction] = useState<TransactionWithDetails | undefined>(undefined);
+    const [filters, setFilters] = useState<ITransactionFilters>({});
 
-    const { data, isLoading, refetch } = useGetTransactionsQuery({ page, size: 20, ...filters });
+    const { data: transactionsData, isLoading } = useGetTransactionsQuery({
+        page,
+        size: 10,
+        ...filters
+    });
+
     const [createTransaction, { isLoading: isCreating }] = useCreateTransactionMutation();
     const [updateTransaction, { isLoading: isUpdating }] = useUpdateTransactionMutation();
     const [deleteTransaction] = useDeleteTransactionMutation();
     const [exportTransactions] = useExportTransactionsMutation();
 
-    const handleCreate = async (formData: TransactionCreate) => {
+    const handleCreateOrUpdate = async (data: TransactionCreate) => {
         try {
-            await createTransaction(formData).unwrap();
+            if (editingTransaction) {
+                await updateTransaction({
+                    id: editingTransaction.id,
+                    data // API expects { id, data }
+                }).unwrap();
+            } else {
+                await createTransaction(data).unwrap();
+            }
             setIsFormOpen(false);
-            refetch();
-        } catch (error) {
-            console.error('Failed to create transaction:', error);
-            alert('Failed to create transaction. Please try again.');
-        }
-    };
-
-    const handleUpdate = async (formData: TransactionCreate) => {
-        if (!editingTransaction) return;
-        try {
-            await updateTransaction({ id: editingTransaction.id, data: formData }).unwrap();
             setEditingTransaction(undefined);
-            setIsFormOpen(false);
-            refetch();
         } catch (error) {
-            console.error('Failed to update transaction:', error);
-            alert('Failed to update transaction. Please try again.');
-        }
-    };
-
-    const handleDelete = async (id: number) => {
-        if (!confirm('Are you sure you want to delete this transaction?')) return;
-        try {
-            await deleteTransaction(id).unwrap();
-            refetch();
-        } catch (error) {
-            console.error('Failed to delete transaction:', error);
-            alert('Failed to delete transaction. Please try again.');
+            console.error('Failed to save transaction:', error);
         }
     };
 
@@ -65,13 +46,23 @@ const Transactions: React.FC = () => {
         setIsFormOpen(true);
     };
 
-    const handleExport = async (format: 'csv' | 'json') => {
+    const handleDelete = async (id: number) => {
+        if (window.confirm('Are you sure you want to delete this transaction?')) {
+            try {
+                await deleteTransaction(id).unwrap();
+            } catch (error) {
+                console.error('Failed to delete transaction:', error);
+            }
+        }
+    };
+
+    const handleExport = async () => {
         try {
-            const blob = await exportTransactions(format).unwrap();
+            const blob = await exportTransactions('csv').unwrap();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `transactions.${format}`;
+            a.download = `transactions-${new Date().toISOString().slice(0, 10)}.csv`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
@@ -82,90 +73,103 @@ const Transactions: React.FC = () => {
         }
     };
 
-    const handleFormClose = () => {
-        setIsFormOpen(false);
-        setEditingTransaction(undefined);
-    };
-
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50 py-8">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Header */}
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900">Transactions</h1>
-                        <p className="mt-2 text-gray-600">Manage your income and expenses</p>
-                    </div>
-
-                    {/* Actions Bar */}
-                    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                            <TransactionFilters filters={filters} onFilterChange={setFilters} />
-                            <button
-                                onClick={() => handleExport('csv')}
-                                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                            >
-                                <Download className="w-4 h-4" />
-                                <span>Export CSV</span>
-                            </button>
-                        </div>
-                        <button
-                            onClick={() => setIsFormOpen(true)}
-                            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
-                        >
-                            <Plus className="w-5 h-5" />
-                            <span>Add Transaction</span>
-                        </button>
-                    </div>
-
-                    {/* Transaction List */}
-                    <TransactionList
-                        transactions={data?.items || []}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                        isLoading={isLoading}
-                    />
-
-                    {/* Pagination */}
-                    {data && data.pages > 1 && (
-                        <div className="mt-6 flex items-center justify-between">
-                            <div className="text-sm text-gray-700">
-                                Showing <span className="font-medium">{((page - 1) * 20) + 1}</span> to{' '}
-                                <span className="font-medium">{Math.min(page * 20, data.total)}</span> of{' '}
-                                <span className="font-medium">{data.total}</span> transactions
+            <div className="min-h-screen bg-gray-50/50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div className="space-y-8">
+                        {/* Header Section */}
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
+                                    Transactions
+                                </h1>
+                                <p className="text-gray-500 mt-1">
+                                    Manage and track your financial activity.
+                                </p>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-3">
                                 <button
-                                    onClick={() => setPage(p => Math.max(1, p - 1))}
-                                    disabled={page === 1}
-                                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    onClick={handleExport}
+                                    className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-all font-medium shadow-sm"
                                 >
-                                    <ChevronLeft className="w-5 h-5" />
+                                    <Download className="w-4 h-4" />
+                                    <span>Export CSV</span>
                                 </button>
-                                <span className="px-4 py-2 text-sm font-medium">
-                                    Page {page} of {data.pages}
-                                </span>
                                 <button
-                                    onClick={() => setPage(p => Math.min(data.pages, p + 1))}
-                                    disabled={page === data.pages}
-                                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    onClick={() => {
+                                        setEditingTransaction(undefined);
+                                        setIsFormOpen(true);
+                                    }}
+                                    className="flex items-center gap-2 px-4 py-2.5 bg-black text-white rounded-xl hover:bg-gray-800 transition-all shadow-lg shadow-gray-200 font-medium"
                                 >
-                                    <ChevronRight className="w-5 h-5" />
+                                    <Plus className="w-4 h-4" />
+                                    <span>New Transaction</span>
                                 </button>
                             </div>
                         </div>
-                    )}
 
-                    {/* Transaction Form Modal */}
-                    {isFormOpen && (
-                        <TransactionForm
-                            transaction={editingTransaction}
-                            onSubmit={editingTransaction ? handleUpdate : handleCreate}
-                            onClose={handleFormClose}
-                            isLoading={isCreating || isUpdating}
-                        />
-                    )}
+                        {/* Filters & Content */}
+                        <div className="space-y-6">
+                            <div className="flex items-center justify-between">
+                                <TransactionFilters
+                                    filters={filters}
+                                    onFilterChange={(newFilters) => {
+                                        setFilters(newFilters);
+                                        setPage(1); // Reset to first page when filters change
+                                    }}
+                                />
+                                {/* Pagination Info */}
+                                <div className="text-sm text-gray-500">
+                                    Showing <span className="font-medium text-gray-900">{transactionsData?.items.length || 0}</span> transactions
+                                </div>
+                            </div>
+
+                            <TransactionList
+                                transactions={transactionsData?.items || []}
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}
+                                isLoading={isLoading}
+                            />
+
+                            {/* Pagination Controls */}
+                            {transactionsData && transactionsData.pages > 1 && (
+                                <div className="flex justify-center gap-2 pt-4">
+                                    <button
+                                        onClick={() => setPage(p => Math.max(1, p - 1))}
+                                        disabled={page === 1}
+                                        className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                                    >
+                                        Previous
+                                    </button>
+                                    <span className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg border border-gray-100">
+                                        Page {page} of {transactionsData.pages}
+                                    </span>
+                                    <button
+                                        onClick={() => setPage(p => Math.min(transactionsData.pages, p + 1))}
+                                        disabled={page === transactionsData.pages}
+                                        className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Modal Form */}
+                        {isFormOpen && (
+                            <TransactionForm
+                                transaction={editingTransaction}
+                                onSubmit={handleCreateOrUpdate}
+                                onClose={() => {
+                                    setIsFormOpen(false);
+                                    setEditingTransaction(undefined);
+                                }}
+                                isLoading={isCreating || isUpdating}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
         </>

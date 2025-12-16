@@ -19,6 +19,10 @@ export const dashboardApi = baseApi.injectEndpoints({
             query: () => '/dashboard/accounts-summary',
             providesTags: ['Dashboard'],
         }),
+        getMonthlyTrends: builder.query<any[], void>({
+            query: () => '/dashboard/monthly-trends',
+            providesTags: ['Dashboard'],
+        }),
     }),
 });
 
@@ -27,4 +31,5 @@ export const {
     useGetRecentTransactionsQuery,
     useGetSpendingByCategoryQuery,
     useGetAccountsSummaryQuery,
+    useGetMonthlyTrendsQuery,
 } = dashboardApi;

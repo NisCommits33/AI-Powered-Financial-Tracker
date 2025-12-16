@@ -178,3 +178,67 @@ async def get_accounts_summary(
     accounts = result.scalars().all()
     
     return accounts
+
+
+@router.get("/monthly-trends")
+async def get_monthly_trends(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+) -> List[Dict[str, Any]]:
+    """
+    Get monthly income vs expenses trends for the last 6 months.
+    
+    Args:
+        current_user: Current authenticated user
+        db: Database session
+        
+    Returns:
+        List[dict]: Monthly trend data
+    """
+    # Calculate start date (6 months ago)
+    end_date = datetime.now()
+    start_date = (end_date - timedelta(days=180)).replace(day=1)
+    
+    # Get monthly sums
+    result = await db.execute(
+        select(
+            func.date_trunc('month', Transaction.transaction_date).label('month'),
+            Transaction.transaction_type,
+            func.sum(Transaction.amount).label('total')
+        )
+        .filter(
+            Transaction.user_id == current_user.id,
+            Transaction.transaction_date >= start_date
+        )
+        .group_by('month', Transaction.transaction_type)
+        .order_by('month')
+    )
+    
+    # Process results into a dictionary keyed by month
+    monthly_data = {}
+    
+    # Initialize with zero values for the range
+    current_month = start_date
+    while current_month <= end_date:
+        month_key = current_month.strftime("%Y-%m")
+        monthly_data[month_key] = {
+            "month": current_month.strftime("%b %Y"),
+            "income": 0,
+            "expense": 0
+        }
+        # Move to next month
+        if current_month.month == 12:
+            current_month = current_month.replace(year=current_month.year + 1, month=1)
+        else:
+            current_month = current_month.replace(month=current_month.month + 1)
+            
+    # Fill with actual data
+    for row in result:
+        month_key = row.month.strftime("%Y-%m")
+        if month_key in monthly_data:
+            if row.transaction_type == TransactionType.INCOME:
+                monthly_data[month_key]["income"] = float(row.total)
+            elif row.transaction_type == TransactionType.EXPENSE:
+                monthly_data[month_key]["expense"] = float(row.total)
+                
+    return list(monthly_data.values())

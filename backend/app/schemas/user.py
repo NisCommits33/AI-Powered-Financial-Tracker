@@ -7,6 +7,7 @@ class UserBase(BaseModel):
     """Base user schema."""
     email: EmailStr
     full_name: str = Field(..., min_length=1, max_length=100)
+    currency: str = "USD"
 
 
 class UserCreate(UserBase):
@@ -24,6 +25,7 @@ class UserUpdate(BaseModel):
     """Schema for user profile update."""
     full_name: Optional[str] = Field(None, min_length=1, max_length=100)
     email: Optional[EmailStr] = None
+    currency: Optional[str] = None
 
 
 class UserResponse(UserBase):

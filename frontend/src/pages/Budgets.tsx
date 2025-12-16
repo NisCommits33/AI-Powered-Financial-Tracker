@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
-import Navbar from '@/components/layout/Navbar';
 import BudgetList from '@/components/budgets/BudgetList';
 import BudgetForm from '@/components/budgets/BudgetForm';
+import Navbar from '@/components/layout/Navbar';
 import {
     useGetBudgetsQuery,
     useCreateBudgetMutation,
@@ -42,38 +42,44 @@ const Budgets: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50 py-8">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Header */}
-                    <div className="mb-8 flex items-center justify-between">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900">Budgets</h1>
-                            <p className="mt-2 text-gray-600">Track your spending and stay within your budget</p>
+            <div className="min-h-screen bg-gray-50/50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div className="space-y-8">
+                        {/* Header */}
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
+                                    Budgets
+                                </h1>
+                                <p className="text-gray-500 mt-1">
+                                    Track your spending and save more money.
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setIsFormOpen(true)}
+                                className="flex items-center gap-2 px-4 py-2.5 bg-black text-white rounded-xl hover:bg-gray-800 transition-all shadow-lg shadow-gray-200 font-medium"
+                            >
+                                <Plus className="w-4 h-4" />
+                                <span>New Budget</span>
+                            </button>
                         </div>
-                        <button
-                            onClick={() => setIsFormOpen(true)}
-                            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
-                        >
-                            <Plus className="w-5 h-5" />
-                            <span>Create Budget</span>
-                        </button>
-                    </div>
 
-                    {/* Budget List */}
-                    <BudgetList
-                        budgets={budgets || []}
-                        onDelete={handleDelete}
-                        isLoading={isLoading}
-                    />
-
-                    {/* Budget Form Modal */}
-                    {isFormOpen && (
-                        <BudgetForm
-                            onSubmit={handleCreate}
-                            onClose={() => setIsFormOpen(false)}
-                            isLoading={isCreating}
+                        {/* Budget List */}
+                        <BudgetList
+                            budgets={budgets || []}
+                            onDelete={handleDelete}
+                            isLoading={isLoading}
                         />
-                    )}
+
+                        {/* Budget Form Modal */}
+                        {isFormOpen && (
+                            <BudgetForm
+                                onSubmit={handleCreate}
+                                onClose={() => setIsFormOpen(false)}
+                                isLoading={isCreating}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
         </>

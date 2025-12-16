@@ -7,6 +7,8 @@ import Register from './pages/Register';
 import Transactions from './pages/Transactions';
 import Accounts from './pages/Accounts';
 import Budgets from './pages/Budgets';
+import Profile from './pages/Profile';
+import Categories from './pages/Categories';
 
 // Protected Route Component
 interface ProtectedRouteProps {
@@ -60,6 +62,22 @@ function App() {
                 element={
                     <ProtectedRoute>
                         <Budgets />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/profile"
+                element={
+                    <ProtectedRoute>
+                        <Profile />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/categories"
+                element={
+                    <ProtectedRoute>
+                        <Categories />
                     </ProtectedRoute>
                 }
             />

@@ -19,6 +19,11 @@ export interface RegisterData {
     full_name: string;
 }
 
+export interface UserUpdate {
+    full_name?: string;
+    email?: string;
+}
+
 export interface AuthResponse {
     access_token: string;
     refresh_token: string;
@@ -31,6 +36,8 @@ export enum AccountType {
     SAVINGS = 'savings',
     CREDIT = 'credit',
     CASH = 'cash',
+    INVESTMENT = 'investment',
+    LOAN = 'loan',
 }
 
 export interface Account {
@@ -39,7 +46,9 @@ export interface Account {
     account_type: AccountType;
     balance: string;
     currency: string;
+    institution_name?: string;
     description?: string;
+    credit_limit?: number;
     is_active: boolean;
     user_id: number;
     created_at: string;
