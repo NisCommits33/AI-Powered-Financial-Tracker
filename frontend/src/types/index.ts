@@ -140,6 +140,35 @@ export interface PaginatedResponse<T> {
     pages: number;
 }
 
+// Budget types
+export interface Budget {
+    id: number;
+    user_id: number;
+    category_id: number;
+    category_name?: string;
+    amount: string;
+    period: string;
+    start_date: string;
+    end_date?: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface BudgetWithProgress extends Budget {
+    spent: string;
+    remaining: string;
+    percentage: number;
+    status: 'on_track' | 'warning' | 'exceeded';
+}
+
+export interface BudgetCreate {
+    category_id: number;
+    amount: string;
+    period: string;
+    start_date: string;
+    end_date?: string;
+}
+
 // API Error
 export interface APIError {
     detail: string;

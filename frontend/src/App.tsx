@@ -4,6 +4,9 @@ import { useAppSelector } from './store/hooks';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Transactions from './pages/Transactions';
+import Accounts from './pages/Accounts';
+import Budgets from './pages/Budgets';
 
 // Protected Route Component
 interface ProtectedRouteProps {
@@ -33,6 +36,30 @@ function App() {
                 element={
                     <ProtectedRoute>
                         <Dashboard />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/transactions"
+                element={
+                    <ProtectedRoute>
+                        <Transactions />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/accounts"
+                element={
+                    <ProtectedRoute>
+                        <Accounts />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/budgets"
+                element={
+                    <ProtectedRoute>
+                        <Budgets />
                     </ProtectedRoute>
                 }
             />
