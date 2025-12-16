@@ -30,8 +30,8 @@ const Dashboard: React.FC = () => {
         refetch: refetchSpending
     } = useGetSpendingByCategoryQuery();
 
-    const [exportTransactions, { isLoading: isExporting }] = useExportTransactionsMutation();
-    const [importTransactions, { isLoading: isImporting }] = useImportTransactionsMutation();
+    const [exportTransactions] = useExportTransactionsMutation();
+    const [importTransactions] = useImportTransactionsMutation();
 
     // Handlers
     const handleExport = async (format: 'json' | 'csv') => {

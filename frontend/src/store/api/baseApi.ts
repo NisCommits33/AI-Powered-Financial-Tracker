@@ -24,6 +24,7 @@ const baseQueryWithReauth: BaseQueryFn<
     if (result.error && result.error.status === 401) {
         // Try to get a new token
         const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+
         if (refreshToken) {
             const refreshResult = await baseQuery(
                 {
@@ -53,6 +54,12 @@ const baseQueryWithReauth: BaseQueryFn<
                 localStorage.removeItem(STORAGE_KEYS.USER);
                 window.location.href = '/login';
             }
+        } else {
+            // No refresh token available - logout
+            localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+            localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+            localStorage.removeItem(STORAGE_KEYS.USER);
+            window.location.href = '/login';
         }
     }
 

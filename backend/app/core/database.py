@@ -60,4 +60,11 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 async def init_db():
     """Initialize database tables."""
     async with async_engine.begin() as conn:
+        # Import models to register them with Base
+        from app.models.user import User
+        from app.models.account import Account
+        from app.models.category import Category
+        from app.models.transaction import Transaction
+        from app.models.budget import Budget
+        
         await conn.run_sync(Base.metadata.create_all)

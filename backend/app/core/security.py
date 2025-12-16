@@ -99,7 +99,8 @@ def decode_token(token: str) -> Dict[str, Any]:
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return payload
-    except JWTError:
+    except JWTError as e:
+        print(f"DEBUG: JWT Decode Error: {e}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -129,13 +130,22 @@ async def get_current_user(
     token = credentials.credentials
     payload = decode_token(token)
     
-    user_id: int = payload.get("sub")
+    user_id_str: str = payload.get("sub")
     token_type: str = payload.get("type")
     
-    if user_id is None or token_type != "access":
+    if user_id_str is None or token_type != "access":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    try:
+        user_id = int(user_id_str)
+    except (ValueError, TypeError):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid user ID in token",
             headers={"WWW-Authenticate": "Bearer"},
         )
     

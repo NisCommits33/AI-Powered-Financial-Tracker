@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { XIcon, DownloadIcon } from 'lucide-react';
+import React from 'react';
+import { DownloadIcon } from 'lucide-react';
 import { Dialog, Transition } from '@headlessui/react';
 
 interface ExportModalProps {

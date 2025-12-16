@@ -1,0 +1,9 @@
+﻿src/components/dashboard/AnalyticsDashboard.tsx(3,5): error TS6133: 'BarChart' is declared but its value is never read.
+src/components/dashboard/AnalyticsDashboard.tsx(4,5): error TS6133: 'Bar' is declared but its value is never read.
+src/components/dashboard/AnalyticsDashboard.tsx(5,5): error TS6133: 'XAxis' is declared but its value is never read.
+src/components/dashboard/AnalyticsDashboard.tsx(6,5): error TS6133: 'YAxis' is declared but its value is never read.
+src/components/dashboard/AnalyticsDashboard.tsx(7,5): error TS6133: 'CartesianGrid' is declared but its value is never read.
+src/components/transactions/ExportModal.tsx(1,17): error TS6133: 'useState' is declared but its value is never read.
+src/components/transactions/ExportModal.tsx(2,10): error TS6133: 'XIcon' is declared but its value is never read.
+src/pages/Dashboard.tsx(33,32): error TS6133: 'isExporting' is declared but its value is never read.
+src/pages/Dashboard.tsx(34,32): error TS6133: 'isImporting' is declared but its value is never read.

@@ -50,7 +50,7 @@ async def general_exception_handler(request: Request, exc: Exception):
 async def startup_event():
     """Initialize application on startup."""
     # Uncomment to create tables on startup (for development)
-    # await init_db()
+    await init_db()
     print(f"🚀 {settings.APP_NAME} started successfully!")
     print(f"📚 API Documentation: http://localhost:8000/docs")
 
