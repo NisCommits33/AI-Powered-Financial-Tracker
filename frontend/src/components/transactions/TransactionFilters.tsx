@@ -50,25 +50,63 @@ const TransactionFilters: React.FC<TransactionFiltersProps> = ({ filters, onFilt
                     </div>
 
                     <div className="p-4 space-y-4">
-                        {/* Date Range */}
+                        {/* Search */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
                             <input
-                                type="date"
-                                value={filters.start_date || ''}
-                                onChange={(e) => handleFilterChange('start_date', e.target.value)}
+                                type="text"
+                                placeholder="Search description or notes..."
+                                value={filters.search || ''}
+                                onChange={(e) => handleFilterChange('search', e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
-                            <input
-                                type="date"
-                                value={filters.end_date || ''}
-                                onChange={(e) => handleFilterChange('end_date', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
+                        {/* Amount Range */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Min Amount</label>
+                                <input
+                                    type="number"
+                                    placeholder="0.00"
+                                    value={filters.min_amount || ''}
+                                    onChange={(e) => handleFilterChange('min_amount', e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Max Amount</label>
+                                <input
+                                    type="number"
+                                    placeholder="Max"
+                                    value={filters.max_amount || ''}
+                                    onChange={(e) => handleFilterChange('max_amount', e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Date Range */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                                <input
+                                    type="date"
+                                    value={filters.start_date || ''}
+                                    onChange={(e) => handleFilterChange('start_date', e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                                <input
+                                    type="date"
+                                    value={filters.end_date || ''}
+                                    onChange={(e) => handleFilterChange('end_date', e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
                         </div>
 
                         {/* Transaction Type */}

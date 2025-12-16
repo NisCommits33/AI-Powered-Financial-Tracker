@@ -91,6 +91,9 @@ async def get_transactions(
     transaction_type: Optional[TransactionType] = None,
     category_id: Optional[int] = None,
     account_id: Optional[int] = None,
+    min_amount: Optional[float] = None,
+    max_amount: Optional[float] = None,
+    search: Optional[str] = None,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
@@ -105,6 +108,9 @@ async def get_transactions(
         transaction_type: Filter by transaction type
         category_id: Filter by category
         account_id: Filter by account
+        min_amount: Filter by minimum amount
+        max_amount: Filter by maximum amount
+        search: Search term for description or notes
         current_user: Current authenticated user
         db: Database session
         
@@ -125,6 +131,18 @@ async def get_transactions(
         query = query.filter(Transaction.category_id == category_id)
     if account_id:
         query = query.filter(Transaction.account_id == account_id)
+    if min_amount is not None:
+        query = query.filter(Transaction.amount >= min_amount)
+    if max_amount is not None:
+        query = query.filter(Transaction.amount <= max_amount)
+    if search:
+        search_term = f"%{search}%"
+        query = query.filter(
+            or_(
+                Transaction.description.ilike(search_term),
+                Transaction.notes.ilike(search_term)
+            )
+        )
     
     # Get total count
     count_query = select(func.count()).select_from(query.alias())

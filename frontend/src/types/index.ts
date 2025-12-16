@@ -95,6 +95,9 @@ export interface TransactionFilters {
     transaction_type?: TransactionType;
     category_id?: number;
     account_id?: number;
+    min_amount?: string;
+    max_amount?: string;
+    search?: string;
 }
 
 // Category types
