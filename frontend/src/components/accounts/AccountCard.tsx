@@ -5,6 +5,7 @@ import {
     MoreVertical, Edit2, Trash2, Copy, TrendingUp, DollarSign,
     ArrowUpRight, ArrowDownLeft
 } from 'lucide-react';
+import { formatCurrency } from '@/utils/format';
 
 interface AccountCardProps {
     account: Account;
@@ -67,10 +68,7 @@ const AccountCard: React.FC<AccountCardProps> = ({ account, onEdit, onDelete }) 
     const balance = parseFloat(account.balance);
     const isNegative = balance < 0;
 
-    const formattedBalance = Math.abs(balance).toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
+
 
     return (
         <div className={`relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group ${config.text}`}>
@@ -138,9 +136,8 @@ const AccountCard: React.FC<AccountCardProps> = ({ account, onEdit, onDelete }) 
                 <div className="mt-8">
                     <p className="text-sm font-medium opacity-80 mb-1">Total Balance</p>
                     <div className="flex items-baseline gap-1">
-                        <span className="text-2xl font-medium opacity-80">{account.currency}</span>
                         <span className="text-4xl font-extrabold tracking-tight text-white shadow-sm">
-                            {isNegative && '-'}{formattedBalance}
+                            {formatCurrency(balance, account.currency)}
                         </span>
                     </div>
                     {isNegative && (

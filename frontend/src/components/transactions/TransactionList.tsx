@@ -2,6 +2,8 @@ import React from 'react';
 import { TransactionWithDetails, TransactionType } from '@/types';
 import { Pencil, Trash2, ArrowUpRight, ArrowDownLeft, Search } from 'lucide-react';
 import { format } from 'date-fns';
+import { useAppSelector } from '@/store/hooks';
+import { formatCurrency } from '@/utils/format';
 
 interface TransactionListProps {
     transactions: TransactionWithDetails[];
@@ -16,6 +18,9 @@ const TransactionList: React.FC<TransactionListProps> = ({
     onDelete,
     isLoading
 }) => {
+    const user = useAppSelector((state) => state.auth.user);
+    const currency = user?.currency || 'USD';
+
     // Skeleton Loading State
     if (isLoading) {
         return (
@@ -102,7 +107,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
                                     <td className="px-6 py-5 whitespace-nowrap text-right">
                                         <span className={`text-sm font-bold ${isIncome ? 'text-emerald-600' : 'text-rose-600'}`}>
-                                            {isIncome ? '+' : '-'}${Math.abs(parseFloat(transaction.amount)).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                            {isIncome ? '+' : '-'}{formatCurrency(parseFloat(transaction.amount), currency)}
                                         </span>
                                     </td>
 

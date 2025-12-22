@@ -15,10 +15,14 @@ import {
     useExportTransactionsMutation,
     useImportTransactionsMutation
 } from '../store/api/transactionsApi';
+import { useAppSelector } from '@/store/hooks';
+import { formatCurrency } from '@/utils/format';
 
 const Dashboard: React.FC = () => {
     const [isExportModalOpen, setIsExportModalOpen] = useState(false);
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+    const user = useAppSelector((state) => state.auth.user);
+    const currency = user?.currency || 'USD';
 
     // API Hooks
     const {
@@ -145,6 +149,7 @@ const Dashboard: React.FC = () => {
                                 totalBalance={dashboardStats.total_balance}
                                 monthlyIncome={dashboardStats.monthly_income}
                                 monthlyExpenses={dashboardStats.monthly_expenses}
+                                currency={currency}
                             />
                         </section>
 
@@ -162,6 +167,7 @@ const Dashboard: React.FC = () => {
                                     <AnalyticsDashboard
                                         spendingByCategory={spending || []}
                                         monthlyTrends={monthlyTrends || []}
+                                        currency={currency}
                                     />
                                 </div>
                             </div>
@@ -193,7 +199,7 @@ const Dashboard: React.FC = () => {
                                                 </div>
                                                 <span className={`text-sm font-bold ${tx.transaction_type === 'income' ? 'text-emerald-600' : 'text-gray-900'
                                                     }`}>
-                                                    {tx.transaction_type === 'income' ? '+' : '-'}${Math.abs(parseFloat(tx.amount)).toLocaleString()}
+                                                    {tx.transaction_type === 'income' ? '+' : '-'}{formatCurrency(parseFloat(tx.amount), currency)}
                                                 </span>
                                             </div>
                                         )) || (

@@ -14,10 +14,12 @@ import {
 } from 'recharts';
 
 import { CategorySpending } from '../../types';
+import { formatCurrency } from '@/utils/format';
 
 interface AnalyticsDashboardProps {
     spendingByCategory: CategorySpending[];
-    monthlyTrends: any[]; // Placeholder for trend data if available
+    monthlyTrends: any[];
+    currency?: string;
 }
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
@@ -25,6 +27,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'
 const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     spendingByCategory,
     monthlyTrends,
+    currency = 'USD',
 }) => {
     return (
         <div className="space-y-6">
@@ -72,7 +75,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                             <XAxis dataKey="month" />
                             <YAxis />
                             <Tooltip
-                                formatter={(value: number) => [`$${value.toFixed(2)}`, undefined]}
+                                formatter={(value: number) => [formatCurrency(value, currency), undefined]}
                                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                             />
                             <Legend />

@@ -7,18 +7,21 @@ interface DashboardStatsProps {
     monthlyExpenses: number;
 }
 
+import { formatCurrency } from '@/utils/format';
+
+interface DashboardStatsProps {
+    totalBalance: number;
+    monthlyIncome: number;
+    monthlyExpenses: number;
+    currency?: string;
+}
+
 const DashboardStats: React.FC<DashboardStatsProps> = ({
     totalBalance,
     monthlyIncome,
     monthlyExpenses,
+    currency = 'USD',
 }) => {
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 2,
-        }).format(amount);
-    };
 
     const netSavings = monthlyIncome - monthlyExpenses;
     const savingsRate = monthlyIncome > 0 ? (netSavings / monthlyIncome) * 100 : 0;
@@ -39,7 +42,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
                     </div>
 
                     <h3 className="text-3xl font-bold tracking-tight mb-2">
-                        {formatCurrency(totalBalance)}
+                        {formatCurrency(totalBalance, currency)}
                     </h3>
 
                     <div className="flex items-center gap-2 text-xs font-medium text-slate-400">
@@ -66,7 +69,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
                     </div>
 
                     <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                        {formatCurrency(monthlyIncome)}
+                        {formatCurrency(monthlyIncome, currency)}
                     </h3>
 
                     <div className="w-full bg-gray-100 rounded-full h-1.5 mt-4 overflow-hidden">
@@ -90,7 +93,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
                     </div>
 
                     <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                        {formatCurrency(monthlyExpenses)}
+                        {formatCurrency(monthlyExpenses, currency)}
                     </h3>
 
                     <div className="flex items-center justify-between mt-4 text-xs font-medium">

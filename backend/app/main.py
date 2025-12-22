@@ -51,6 +51,30 @@ async def startup_event():
     """Initialize application on startup."""
     # Uncomment to create tables on startup (for development)
     await init_db()
+    
+    # Auto-migration for currency column
+    try:
+        from sqlalchemy import text, inspect
+        from app.core.database import async_engine
+        
+        def check_currency_column(connection):
+            inspector = inspect(connection)
+            columns = [c['name'] for c in inspector.get_columns('users')]
+            return 'currency' in columns
+
+        async with async_engine.connect() as conn:
+            # Check if column exists using sync inspector
+            has_currency = await conn.run_sync(check_currency_column)
+            
+            if not has_currency:
+                print("Migrating: Adding currency column to users table...")
+                # SQLite syntax compatible
+                await conn.execute(text("ALTER TABLE users ADD COLUMN currency VARCHAR DEFAULT 'USD'"))
+                await conn.commit()
+                print("Migration successful: currency column added.")
+    except Exception as e:
+        print(f"Migration warning: {e}")
+
     print(f"🚀 {settings.APP_NAME} started successfully!")
     print(f"📚 API Documentation: http://localhost:8000/docs")
 
