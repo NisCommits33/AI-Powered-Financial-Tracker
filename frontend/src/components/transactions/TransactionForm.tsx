@@ -3,7 +3,9 @@ import { useForm } from 'react-hook-form';
 import { TransactionCreate, TransactionType, TransactionWithDetails } from '@/types';
 import { useGetAccountsQuery } from '@/store/api/accountsApi';
 import { useGetCategoriesQuery } from '@/store/api/categoriesApi';
-import { X, DollarSign, Calendar, AlertCircle, Tag, Wallet, FileText, ArrowUpRight, ArrowDownRight, ChevronRight, Check } from 'lucide-react';
+import { useAppSelector } from '@/store/hooks';
+import { formatCurrency } from '@/utils/format';
+import { X, DollarSign, Calendar, Tag, Wallet, FileText, ArrowUpRight, ArrowDownRight, Check, ArrowLeft, TrendingDown, TrendingUp } from 'lucide-react';
 
 interface TransactionFormProps {
     transaction?: TransactionWithDetails;
@@ -21,6 +23,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     const [step, setStep] = useState(1);
     const { data: accounts } = useGetAccountsQuery();
     const { data: categories } = useGetCategoriesQuery();
+    const user = useAppSelector((state) => state.auth.user);
+    const currency = user?.currency || 'USD';
 
     const {
         register,
@@ -37,6 +41,22 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     });
 
     const transactionType = watch('transaction_type');
+    const selectedAccountId = watch('account_id');
+    const amount = watch('amount');
+
+    // Derived state for insights
+    const selectedAccount = accounts?.find(a => a.id === selectedAccountId);
+    const currentBalance = selectedAccount ? parseFloat(selectedAccount.balance) : 0;
+    const transactionAmount = amount ? parseFloat(amount.toString()) : 0;
+
+    let remainingBalance = currentBalance;
+    if (transactionType === TransactionType.INCOME) {
+        remainingBalance += transactionAmount;
+    } else {
+        remainingBalance -= transactionAmount;
+    }
+
+    const isOverdraft = remainingBalance < 0;
 
     useEffect(() => {
         if (transaction) {
@@ -49,27 +69,61 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 category_id: transaction.category_id,
                 account_id: transaction.account_id,
             });
-            setStep(2); // Skip to details if editing
+            setStep(3); // Go straight to details if editing
         }
     }, [transaction, reset]);
 
-    const handleNextStep = () => {
-        setStep(2);
+    const handleBack = () => {
+        setStep(Math.max(1, step - 1));
     };
 
+    const selectAccount = (accountId: number) => {
+        setValue('account_id', accountId);
+        setStep(3);
+    };
+
+    const getStepTitle = () => {
+        if (transaction) return 'Edit Transaction';
+        switch (step) {
+            case 1: return 'Transaction Type';
+            case 2: return 'Select Account';
+            case 3: return 'Details & Review';
+            default: return 'New Transaction';
+        }
+    };
+
+    const getStepDescription = () => {
+        if (transaction) return 'Update details below';
+        switch (step) {
+            case 1: return 'Is this money coming in or going out?';
+            case 2: return 'Which account is this transaction for?';
+            case 3: return 'Enter amount and details';
+            default: return '';
+        }
+    };
 
     return (
-        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-12 animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-12 animate-in fade-in duration-200">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-gray-50/50">
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-                            {transaction ? 'Edit Transaction' : 'New Transaction'}
-                        </h2>
-                        <p className="text-gray-500 text-sm mt-0.5">
-                            {transaction ? 'Update transaction details' : `Step ${step} of 2: ${step === 1 ? 'Select Type' : 'Transaction Details'}`}
-                        </p>
+                    <div className="flex items-center gap-4">
+                        {step > 1 && !transaction && (
+                            <button
+                                onClick={handleBack}
+                                className="p-2 -ml-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                            >
+                                <ArrowLeft className="w-5 h-5" />
+                            </button>
+                        )}
+                        <div>
+                            <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">
+                                {getStepTitle()}
+                            </h2>
+                            <p className="text-gray-500 text-sm mt-0.5">
+                                {getStepDescription()}
+                            </p>
+                        </div>
                     </div>
                     <button
                         onClick={onClose}
@@ -81,59 +135,115 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto p-6 md:p-8">
-                    <form id="transaction-form" onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                    <form id="transaction-form" onSubmit={handleSubmit(onSubmit)} className="space-y-8 h-full">
 
                         {/* Step 1: Type Selection */}
                         {step === 1 && !transaction && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-in slide-in-from-right-4 duration-300">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-in slide-in-from-right-4 duration-300 h-full content-center">
                                 <button
                                     type="button"
-                                    onClick={() => setValue('transaction_type', TransactionType.INCOME)}
-                                    className={`group relative flex flex-col items-center justify-center p-8 border-2 rounded-3xl transition-all duration-200 hover:shadow-lg ${transactionType === TransactionType.INCOME
-                                        ? 'border-emerald-500 bg-emerald-50/50'
-                                        : 'border-gray-100 hover:border-emerald-200 hover:bg-gray-50'
-                                        }`}
+                                    onClick={() => { setValue('transaction_type', TransactionType.INCOME); setStep(2); }}
+                                    className="group relative flex flex-col items-center justify-center p-8 border-2 rounded-3xl transition-all duration-200 hover:shadow-lg border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/30"
                                 >
-                                    <div className={`p-4 rounded-2xl mb-4 transition-colors ${transactionType === TransactionType.INCOME ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400 group-hover:bg-emerald-50 group-hover:text-emerald-600'}`}>
-                                        <ArrowUpRight className="w-8 h-8" />
+                                    <div className="p-6 rounded-full mb-6 bg-emerald-100 text-emerald-600 group-hover:scale-110 transition-transform">
+                                        <ArrowUpRight className="w-10 h-10" />
                                     </div>
-                                    <span className={`text-lg font-bold ${transactionType === TransactionType.INCOME ? 'text-emerald-700' : 'text-gray-600'}`}>Income</span>
-                                    <p className="text-sm text-gray-500 mt-2 text-center">Salary, Freelance, etc.</p>
-
-                                    {transactionType === TransactionType.INCOME && (
-                                        <div className="absolute top-4 right-4 animate-in zoom-in-50">
-                                            <Check className="w-6 h-6 bg-emerald-500 text-white rounded-full p-1" />
-                                        </div>
-                                    )}
+                                    <span className="text-xl font-bold text-gray-700 group-hover:text-emerald-700">Income</span>
+                                    <p className="text-sm text-gray-500 mt-2 text-center max-w-[150px]">Salary, Deposits, Refunds, etc.</p>
                                 </button>
 
                                 <button
                                     type="button"
-                                    onClick={() => setValue('transaction_type', TransactionType.EXPENSE)}
-                                    className={`group relative flex flex-col items-center justify-center p-8 border-2 rounded-3xl transition-all duration-200 hover:shadow-lg ${transactionType === TransactionType.EXPENSE
-                                        ? 'border-rose-500 bg-rose-50/50'
-                                        : 'border-gray-100 hover:border-rose-200 hover:bg-gray-50'
-                                        }`}
+                                    onClick={() => { setValue('transaction_type', TransactionType.EXPENSE); setStep(2); }}
+                                    className="group relative flex flex-col items-center justify-center p-8 border-2 rounded-3xl transition-all duration-200 hover:shadow-lg border-gray-100 hover:border-rose-200 hover:bg-rose-50/30"
                                 >
-                                    <div className={`p-4 rounded-2xl mb-4 transition-colors ${transactionType === TransactionType.EXPENSE ? 'bg-rose-100 text-rose-600' : 'bg-gray-100 text-gray-400 group-hover:bg-rose-50 group-hover:text-rose-600'}`}>
-                                        <ArrowDownRight className="w-8 h-8" />
+                                    <div className="p-6 rounded-full mb-6 bg-rose-100 text-rose-600 group-hover:scale-110 transition-transform">
+                                        <ArrowDownRight className="w-10 h-10" />
                                     </div>
-                                    <span className={`text-lg font-bold ${transactionType === TransactionType.EXPENSE ? 'text-rose-700' : 'text-gray-600'}`}>Expense</span>
-                                    <p className="text-sm text-gray-500 mt-2 text-center">Food, Rent, Shopping, etc.</p>
-
-                                    {transactionType === TransactionType.EXPENSE && (
-                                        <div className="absolute top-4 right-4 animate-in zoom-in-50">
-                                            <Check className="w-6 h-6 bg-rose-500 text-white rounded-full p-1" />
-                                        </div>
-                                    )}
+                                    <span className="text-xl font-bold text-gray-700 group-hover:text-rose-700">Expense</span>
+                                    <p className="text-sm text-gray-500 mt-2 text-center max-w-[150px]">Purchases, Bills, Fees, etc.</p>
                                 </button>
                             </div>
                         )}
 
-                        {/* Step 2: Details */}
-                        {(step === 2 || transaction) && (
+                        {/* Step 2: Account Selection */}
+                        {step === 2 && !transaction && (
+                            <div className="space-y-4 animate-in slide-in-from-right-4 duration-300">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {accounts?.map((account) => (
+                                        <button
+                                            key={account.id}
+                                            type="button"
+                                            onClick={() => selectAccount(account.id)}
+                                            className={`relative p-5 text-left border rounded-2xl transition-all hover:shadow-md ${selectedAccountId === account.id
+                                                ? 'border-blue-500 bg-blue-50/30 ring-1 ring-blue-500'
+                                                : 'border-gray-200 hover:border-blue-300 bg-white'
+                                                }`}
+                                        >
+                                            <div className="flex justify-between items-start mb-2">
+                                                <span className="font-semibold text-gray-900">{account.name}</span>
+                                                {selectedAccountId === account.id && (
+                                                    <Check className="w-5 h-5 text-blue-600" />
+                                                )}
+                                            </div>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-2xl font-bold text-gray-800">
+                                                    {formatCurrency(parseFloat(account.balance), currency)}
+                                                </span>
+                                            </div>
+                                            <p className="text-xs text-gray-500 mt-1 capitalize">{account.account_type}</p>
+                                        </button>
+                                    ))}
+
+                                    {/* Add New Account Placeholder */}
+                                    <div className="p-5 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-gray-400 gap-2 min-h-[120px]">
+                                        <Wallet className="w-6 h-6" />
+                                        <span className="text-sm font-medium">Don't see your account?</span>
+                                    </div>
+                                </div>
+                                <input type="hidden" {...register('account_id', { required: 'Please select an account' })} />
+                                {errors.account_id && (
+                                    <p className="text-center text-red-500 text-sm font-medium animate-pulse">
+                                        {errors.account_id.message}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Step 3: Details & Insights */}
+                        {step === 3 && (
                             <div className="space-y-8 animate-in slide-in-from-right-4 duration-300">
-                                {/* Amount - Featured Input */}
+                                {/* Insight Card */}
+                                {selectedAccount && (
+                                    <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+                                                <Wallet className="w-5 h-5 text-gray-500" />
+                                            </div>
+                                            <div>
+                                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Analysis for</p>
+                                                <p className="font-bold text-gray-900">{selectedAccount.name}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-6 text-right">
+                                            <div>
+                                                <p className="text-xs text-gray-500 mb-0.5">Current Balance</p>
+                                                <p className="font-medium text-gray-900">{formatCurrency(currentBalance, currency)}</p>
+                                            </div>
+                                            <div className="h-8 w-px bg-gray-200 hidden sm:block"></div>
+                                            <div>
+                                                <p className="text-xs text-gray-500 mb-0.5">Remaining Balance</p>
+                                                <div className={`flex items-center gap-1.5 font-bold text-lg ${isOverdraft ? 'text-red-600' : 'text-emerald-600'}`}>
+                                                    {isOverdraft ? <TrendingDown className="w-4 h-4" /> : <TrendingUp className="w-4 h-4" />}
+                                                    {formatCurrency(remainingBalance, currency)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Amount Input */}
                                 <div className="relative">
                                     <label className="block text-sm font-medium text-gray-700 mb-2 text-center uppercase tracking-wide">
                                         {transactionType === TransactionType.INCOME ? 'Amount Received' : 'Amount Spent'}
@@ -152,14 +262,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                         />
                                     </div>
                                     {errors.amount && (
-                                        <div className="flex justify-center items-center gap-1 mt-2 text-red-600 text-sm animate-in slide-in-from-top-1">
-                                            <AlertCircle className="w-4 h-4" />
-                                            <span>{errors.amount.message}</span>
-                                        </div>
+                                        <p className="text-center text-red-600 text-sm mt-2">{errors.amount.message}</p>
                                     )}
                                 </div>
 
-                                <div className="space-y-6 bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Description */}
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
@@ -170,88 +277,57 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                             <input
                                                 type="text"
                                                 {...register('description', { required: 'Description is required' })}
-                                                className="block w-full pl-10 pr-3 py-3 bg-white focus:bg-white rounded-xl border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                                className="block w-full pl-10 pr-3 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                                 placeholder="What was this for?"
                                             />
                                         </div>
-                                        {errors.description && (
-                                            <p className="text-sm text-red-600 mt-1">{errors.description.message}</p>
-                                        )}
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        {/* Account */}
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Account</label>
-                                            <div className="relative">
-                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                    <Wallet className="h-5 w-5 text-gray-400" />
-                                                </div>
-                                                <select
-                                                    {...register('account_id', { required: 'Account is required', valueAsNumber: true })}
-                                                    className="block w-full pl-10 pr-4 py-3 bg-white focus:bg-white rounded-xl border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer"
-                                                >
-                                                    <option value="">Select Account</option>
-                                                    {accounts?.map((account) => (
-                                                        <option key={account.id} value={account.id}>
-                                                            {account.name} (${parseFloat(account.balance).toFixed(2)})
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                    {/* Category */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <Tag className="h-5 w-5 text-gray-400" />
                                             </div>
-                                            {errors.account_id && (
-                                                <p className="text-sm text-red-600 mt-1">{errors.account_id.message}</p>
-                                            )}
-                                        </div>
-
-                                        {/* Category */}
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                                            <div className="relative">
-                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                    <Tag className="h-5 w-5 text-gray-400" />
-                                                </div>
-                                                <select
-                                                    {...register('category_id', { valueAsNumber: true })}
-                                                    className="block w-full pl-10 pr-4 py-3 bg-white focus:bg-white rounded-xl border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer"
-                                                >
-                                                    <option value="">Select Category</option>
-                                                    {categories?.map((category) => (
-                                                        <option key={category.id} value={category.id}>
-                                                            {category.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
+                                            <select
+                                                {...register('category_id', { valueAsNumber: true })}
+                                                className="block w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none"
+                                            >
+                                                <option value="">Select Category</option>
+                                                {categories?.map((category) => (
+                                                    <option key={category.id} value={category.id}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        {/* Date */}
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                                            <div className="relative">
-                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                    <Calendar className="h-5 w-5 text-gray-400" />
-                                                </div>
-                                                <input
-                                                    type="date"
-                                                    {...register('transaction_date', { required: 'Date is required' })}
-                                                    className="block w-full pl-10 pr-4 py-3 bg-white focus:bg-white rounded-xl border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                                />
+                                    {/* Date */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <Calendar className="h-5 w-5 text-gray-400" />
                                             </div>
-                                        </div>
-
-                                        {/* Notes */}
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Notes</label>
                                             <input
-                                                type="text"
-                                                {...register('notes')}
-                                                className="block w-full px-4 py-3 bg-white focus:bg-white rounded-xl border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                                placeholder="Optional..."
+                                                type="date"
+                                                {...register('transaction_date', { required: 'Date is required' })}
+                                                className="block w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                             />
                                         </div>
+                                    </div>
+
+                                    {/* Notes */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                                        <input
+                                            type="text"
+                                            {...register('notes')}
+                                            className="block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                            placeholder="Optional..."
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -261,7 +337,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
                 {/* Footer */}
                 <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3 z-10">
-                    {step === 1 && !transaction ? (
+                    {step === 3 && (
                         <>
                             <button
                                 type="button"
@@ -271,25 +347,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                 Cancel
                             </button>
                             <button
-                                type="button"
-                                onClick={handleNextStep}
-                                className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-xl shadow-lg shadow-gray-900/20 transition-all transform active:scale-95"
-                            >
-                                Continue <ChevronRight className="w-4 h-4 ml-1" />
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            {!transaction && (
-                                <button
-                                    type="button"
-                                    onClick={() => setStep(1)}
-                                    className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-                                >
-                                    Back
-                                </button>
-                            )}
-                            <button
                                 form="transaction-form"
                                 type="submit"
                                 disabled={isLoading}
@@ -298,10 +355,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                 {isLoading ? (
                                     <>
                                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-                                        Saving...
+                                        Processing...
                                     </>
                                 ) : (
-                                    transaction ? 'Save Changes' : 'Create Transaction'
+                                    transaction ? 'Save Changes' : 'Confirm Transaction'
                                 )}
                             </button>
                         </>
