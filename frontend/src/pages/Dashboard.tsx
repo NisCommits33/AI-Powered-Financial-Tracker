@@ -111,7 +111,7 @@ const Dashboard: React.FC = () => {
                                 <span>{currentDate}</span>
                             </div>
                             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                                Welcome back, <span className="text-blue-600">User</span>
+                                Welcome back, <span className="text-blue-600">{user?.full_name || 'User'}</span>
                             </h1>
                             <p className="text-gray-500 mt-1">Here's what's happening with your finance today.</p>
                         </div>

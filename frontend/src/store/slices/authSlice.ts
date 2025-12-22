@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { User } from '@/types';
 import { STORAGE_KEYS } from '@/utils/constants';
+import { authApi } from '@/store/api/authApi';
 
 interface AuthState {
     user: User | null;
@@ -51,7 +52,27 @@ const authSlice = createSlice({
             localStorage.removeItem(STORAGE_KEYS.USER);
             localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
             localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+
+            // Clear API state
+            authApi.util.resetApiState();
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addMatcher(
+                authApi.endpoints.getCurrentUser.matchFulfilled,
+                (state, { payload }) => {
+                    state.user = payload;
+                    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(payload));
+                }
+            )
+            .addMatcher(
+                authApi.endpoints.updateProfile.matchFulfilled,
+                (state, { payload }) => {
+                    state.user = payload;
+                    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(payload));
+                }
+            );
     },
 });
 

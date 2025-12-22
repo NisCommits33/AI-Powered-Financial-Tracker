@@ -144,6 +144,7 @@ const Profile: React.FC = () => {
                                             <option value="EUR">EUR (€) - Euro</option>
                                             <option value="GBP">GBP (£) - British Pound</option>
                                             <option value="INR">INR (₹) - Indian Rupee</option>
+                                            <option value="NPR">NPR (Rs.) - Nepalese Rupee</option>
                                             <option value="JPY">JPY (¥) - Japanese Yen</option>
                                             <option value="CAD">CAD (CA$) - Canadian Dollar</option>
                                             <option value="AUD">AUD (A$) - Australian Dollar</option>
