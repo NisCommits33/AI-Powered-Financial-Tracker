@@ -52,15 +52,15 @@ const Categories: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50/50 pb-12">
+            <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950 pb-12 transition-colors">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                         <div>
-                            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
+                            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
                                 Categories
                             </h1>
-                            <p className="text-gray-500 mt-1">
+                            <p className="text-gray-500 dark:text-gray-400 mt-1">
                                 Organize your transactions with custom categories.
                             </p>
                         </div>
@@ -69,7 +69,7 @@ const Categories: React.FC = () => {
                                 setEditingCategory(undefined);
                                 setIsFormOpen(true);
                             }}
-                            className="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-xl shadow-lg transition-all"
+                            className="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-gray-900 dark:bg-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 rounded-xl shadow-lg transition-all"
                         >
                             <Plus className="w-4 h-4 mr-2" />
                             Add Category
@@ -86,7 +86,7 @@ const Categories: React.FC = () => {
                             placeholder="Search categories..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+                            className="block w-full pl-10 pr-3 py-3 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
                         />
                     </div>
 
@@ -94,7 +94,7 @@ const Categories: React.FC = () => {
                     {isLoading ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[1, 2, 3, 4, 5, 6].map((i) => (
-                                <div key={i} className="h-40 bg-white rounded-3xl shadow-sm border border-gray-100 animate-pulse" />
+                                <div key={i} className="h-40 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 animate-pulse" />
                             ))}
                         </div>
                     ) : (
@@ -102,19 +102,19 @@ const Categories: React.FC = () => {
                             {filteredCategories?.map((category) => (
                                 <div
                                     key={category.id}
-                                    className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group relative overflow-hidden"
+                                    className="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow group relative overflow-hidden"
                                 >
                                     <div className="absolute top-0 left-0 w-2 h-full" style={{ backgroundColor: category.color || '#e5e7eb' }} />
 
                                     <div className="flex justify-between items-start pl-4">
                                         <div className="flex items-center gap-3 mb-3">
-                                            <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400">
+                                            <div className="w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-700/50 flex items-center justify-center text-gray-400">
                                                 <Tag className="w-5 h-5" style={{ color: category.color || 'inherit' }} />
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-bold text-gray-900">{category.name}</h3>
+                                                <h3 className="text-lg font-bold text-gray-900 dark:text-white">{category.name}</h3>
                                                 {category.is_default && (
-                                                    <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                                                    <span className="text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">
                                                         Default
                                                     </span>
                                                 )}
@@ -128,13 +128,13 @@ const Categories: React.FC = () => {
                                                         setEditingCategory(category);
                                                         setIsFormOpen(true);
                                                     }}
-                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                    className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                                                 >
                                                     <Pencil className="w-4 h-4" />
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(category.id)}
-                                                    className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                                                    className="p-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-lg transition-colors"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
@@ -142,7 +142,7 @@ const Categories: React.FC = () => {
                                         )}
                                     </div>
 
-                                    <p className="text-sm text-gray-500 pl-4 min-h-[40px]">
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 pl-4 min-h-[40px]">
                                         {category.description || 'No description provided.'}
                                     </p>
                                 </div>
@@ -152,12 +152,12 @@ const Categories: React.FC = () => {
 
                     {/* Empty State */}
                     {!isLoading && filteredCategories?.length === 0 && (
-                        <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 border-dashed">
-                            <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Search className="w-8 h-8 text-gray-400" />
+                        <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 border-dashed">
+                            <div className="w-16 h-16 bg-gray-50 dark:bg-gray-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Search className="w-8 h-8 text-gray-400 dark:text-gray-500" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">No categories found</h3>
-                            <p className="text-gray-500">
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">No categories found</h3>
+                            <p className="text-gray-500 dark:text-gray-400">
                                 Try modifying your search or add a new category.
                             </p>
                         </div>

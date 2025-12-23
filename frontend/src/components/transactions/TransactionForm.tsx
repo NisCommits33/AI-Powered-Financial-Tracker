@@ -104,30 +104,30 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
     return (
         <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-12 animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 transition-colors">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-gray-50/50">
+                <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
                     <div className="flex items-center gap-4">
                         {step > 1 && !transaction && (
                             <button
                                 onClick={handleBack}
-                                className="p-2 -ml-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                                className="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
                             >
                                 <ArrowLeft className="w-5 h-5" />
                             </button>
                         )}
                         <div>
-                            <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">
+                            <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
                                 {getStepTitle()}
                             </h2>
-                            <p className="text-gray-500 text-sm mt-0.5">
+                            <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
                                 {getStepDescription()}
                             </p>
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                        className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
                     >
                         <X className="w-6 h-6" />
                     </button>
@@ -143,25 +143,25 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                 <button
                                     type="button"
                                     onClick={() => { setValue('transaction_type', TransactionType.INCOME); setStep(2); }}
-                                    className="group relative flex flex-col items-center justify-center p-8 border-2 rounded-3xl transition-all duration-200 hover:shadow-lg border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/30"
+                                    className="group relative flex flex-col items-center justify-center p-8 border-2 rounded-3xl transition-all duration-200 hover:shadow-lg border-gray-100 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-500/50 hover:bg-emerald-50/30 dark:hover:bg-emerald-900/20"
                                 >
                                     <div className="p-6 rounded-full mb-6 bg-emerald-100 text-emerald-600 group-hover:scale-110 transition-transform">
                                         <ArrowUpRight className="w-10 h-10" />
                                     </div>
-                                    <span className="text-xl font-bold text-gray-700 group-hover:text-emerald-700">Income</span>
-                                    <p className="text-sm text-gray-500 mt-2 text-center max-w-[150px]">Salary, Deposits, Refunds, etc.</p>
+                                    <span className="text-xl font-bold text-gray-700 dark:text-gray-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Income</span>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center max-w-[150px]">Salary, Deposits, Refunds, etc.</p>
                                 </button>
 
                                 <button
                                     type="button"
                                     onClick={() => { setValue('transaction_type', TransactionType.EXPENSE); setStep(2); }}
-                                    className="group relative flex flex-col items-center justify-center p-8 border-2 rounded-3xl transition-all duration-200 hover:shadow-lg border-gray-100 hover:border-rose-200 hover:bg-rose-50/30"
+                                    className="group relative flex flex-col items-center justify-center p-8 border-2 rounded-3xl transition-all duration-200 hover:shadow-lg border-gray-100 dark:border-gray-700 hover:border-rose-200 dark:hover:border-rose-500/50 hover:bg-rose-50/30 dark:hover:bg-rose-900/20"
                                 >
-                                    <div className="p-6 rounded-full mb-6 bg-rose-100 text-rose-600 group-hover:scale-110 transition-transform">
+                                    <div className="p-6 rounded-full mb-6 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 group-hover:scale-110 transition-transform">
                                         <ArrowDownRight className="w-10 h-10" />
                                     </div>
-                                    <span className="text-xl font-bold text-gray-700 group-hover:text-rose-700">Expense</span>
-                                    <p className="text-sm text-gray-500 mt-2 text-center max-w-[150px]">Purchases, Bills, Fees, etc.</p>
+                                    <span className="text-xl font-bold text-gray-700 dark:text-gray-200 group-hover:text-rose-700 dark:group-hover:text-rose-400">Expense</span>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center max-w-[150px]">Purchases, Bills, Fees, etc.</p>
                                 </button>
                             </div>
                         )}
@@ -176,27 +176,27 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                             type="button"
                                             onClick={() => selectAccount(account.id)}
                                             className={`relative p-5 text-left border rounded-2xl transition-all hover:shadow-md ${selectedAccountId === account.id
-                                                ? 'border-blue-500 bg-blue-50/30 ring-1 ring-blue-500'
-                                                : 'border-gray-200 hover:border-blue-300 bg-white'
+                                                ? 'border-blue-500 bg-blue-50/30 ring-1 ring-blue-500 dark:bg-blue-900/30 dark:border-blue-400 dark:ring-blue-400'
+                                                : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500 bg-white dark:bg-gray-800'
                                                 }`}
                                         >
                                             <div className="flex justify-between items-start mb-2">
-                                                <span className="font-semibold text-gray-900">{account.name}</span>
+                                                <span className="font-semibold text-gray-900 dark:text-white">{account.name}</span>
                                                 {selectedAccountId === account.id && (
-                                                    <Check className="w-5 h-5 text-blue-600" />
+                                                    <Check className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                                                 )}
                                             </div>
                                             <div className="flex items-baseline gap-1">
-                                                <span className="text-2xl font-bold text-gray-800">
+                                                <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                                                     {formatCurrency(parseFloat(account.balance), currency)}
                                                 </span>
                                             </div>
-                                            <p className="text-xs text-gray-500 mt-1 capitalize">{account.account_type}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 capitalize">{account.account_type}</p>
                                         </button>
                                     ))}
 
                                     {/* Add New Account Placeholder */}
-                                    <div className="p-5 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-gray-400 gap-2 min-h-[120px]">
+                                    <div className="p-5 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-2xl flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 gap-2 min-h-[120px]">
                                         <Wallet className="w-6 h-6" />
                                         <span className="text-sm font-medium">Don't see your account?</span>
                                     </div>
@@ -204,7 +204,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                 <input type="hidden" {...register('account_id', { required: 'Please select an account' })} />
                                 {errors.account_id && (
                                     <p className="text-center text-red-500 text-sm font-medium animate-pulse">
-                                        {errors.account_id.message}
+                                        {errors.account_id?.message}
                                     </p>
                                 )}
                             </div>
@@ -215,26 +215,26 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             <div className="space-y-8 animate-in slide-in-from-right-4 duration-300">
                                 {/* Insight Card */}
                                 {selectedAccount && (
-                                    <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                    <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                                                <Wallet className="w-5 h-5 text-gray-500" />
+                                            <div className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                                                <Wallet className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Analysis for</p>
-                                                <p className="font-bold text-gray-900">{selectedAccount.name}</p>
+                                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Analysis for</p>
+                                                <p className="font-bold text-gray-900 dark:text-white">{selectedAccount?.name}</p>
                                             </div>
                                         </div>
 
                                         <div className="flex items-center gap-6 text-right">
                                             <div>
-                                                <p className="text-xs text-gray-500 mb-0.5">Current Balance</p>
-                                                <p className="font-medium text-gray-900">{formatCurrency(currentBalance, currency)}</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Current Balance</p>
+                                                <p className="font-medium text-gray-900 dark:text-white">{formatCurrency(currentBalance, currency)}</p>
                                             </div>
-                                            <div className="h-8 w-px bg-gray-200 hidden sm:block"></div>
+                                            <div className="h-8 w-px bg-gray-200 dark:bg-gray-600 hidden sm:block"></div>
                                             <div>
-                                                <p className="text-xs text-gray-500 mb-0.5">Remaining Balance</p>
-                                                <div className={`flex items-center gap-1.5 font-bold text-lg ${isOverdraft ? 'text-red-600' : 'text-emerald-600'}`}>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Remaining Balance</p>
+                                                <div className={`flex items-center gap-1.5 font-bold text-lg ${isOverdraft ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                                                     {isOverdraft ? <TrendingDown className="w-4 h-4" /> : <TrendingUp className="w-4 h-4" />}
                                                     {formatCurrency(remainingBalance, currency)}
                                                 </div>
@@ -245,7 +245,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
                                 {/* Amount Input */}
                                 <div className="relative">
-                                    <label className="block text-sm font-medium text-gray-700 mb-2 text-center uppercase tracking-wide">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 text-center uppercase tracking-wide">
                                         {transactionType === TransactionType.INCOME ? 'Amount Received' : 'Amount Spent'}
                                     </label>
                                     <div className="relative max-w-xs mx-auto">
@@ -256,20 +256,20 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                             type="number"
                                             step="0.01"
                                             {...register('amount', { required: 'Amount is required', min: 0.01 })}
-                                            className="block w-full pl-14 pr-4 py-4 text-4xl font-bold text-center bg-transparent border-b-2 border-gray-200 focus:border-blue-500 text-gray-900 focus:ring-0 transition-all placeholder-gray-300"
+                                            className="block w-full pl-14 pr-4 py-4 text-4xl font-bold text-center bg-transparent border-b-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white focus:ring-0 transition-all placeholder-gray-300 dark:placeholder-gray-600"
                                             placeholder="0.00"
                                             autoFocus
                                         />
                                     </div>
                                     {errors.amount && (
-                                        <p className="text-center text-red-600 text-sm mt-2">{errors.amount.message}</p>
+                                        <p className="text-center text-red-600 text-sm mt-2">{errors.amount?.message}</p>
                                     )}
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Description */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
                                         <div className="relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <FileText className="h-5 w-5 text-gray-400" />
@@ -277,7 +277,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                             <input
                                                 type="text"
                                                 {...register('description', { required: 'Description is required' })}
-                                                className="block w-full pl-10 pr-3 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                                className="block w-full pl-10 pr-3 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all dark:text-white"
                                                 placeholder="What was this for?"
                                             />
                                         </div>
@@ -285,14 +285,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
                                     {/* Category */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
                                         <div className="relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <Tag className="h-5 w-5 text-gray-400" />
                                             </div>
                                             <select
                                                 {...register('category_id', { valueAsNumber: true })}
-                                                className="block w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none"
+                                                className="block w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none dark:text-white"
                                             >
                                                 <option value="">Select Category</option>
                                                 {categories?.map((category) => (
@@ -306,7 +306,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
                                     {/* Date */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date</label>
                                         <div className="relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <Calendar className="h-5 w-5 text-gray-400" />
@@ -314,18 +314,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                             <input
                                                 type="date"
                                                 {...register('transaction_date', { required: 'Date is required' })}
-                                                className="block w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                                className="block w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all dark:text-white dark:fill-white"
                                             />
                                         </div>
                                     </div>
 
                                     {/* Notes */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notes</label>
                                         <input
                                             type="text"
                                             {...register('notes')}
-                                            className="block w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                            className="block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all dark:text-white"
                                             placeholder="Optional..."
                                         />
                                     </div>
@@ -336,13 +336,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3 z-10">
+                <div className="p-6 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex justify-end gap-3 z-10">
                     {step === 3 && (
                         <>
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
+                                className="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors"
                             >
                                 Cancel
                             </button>
@@ -350,7 +350,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                 form="transaction-form"
                                 type="submit"
                                 disabled={isLoading}
-                                className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-xl shadow-lg shadow-gray-900/20 transition-all transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+                                className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-xl shadow-lg shadow-gray-900/20 dark:shadow-blue-900/20 transition-all transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                                 {isLoading ? (
                                     <>

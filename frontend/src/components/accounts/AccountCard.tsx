@@ -105,24 +105,23 @@ const AccountCard: React.FC<AccountCardProps> = ({ account, onEdit, onDelete }) 
 
                         {isMenuOpen && (
                             <>
-                                <div className="fixed inset-0 z-10" onClick={() => setIsMenuOpen(false)} />
-                                <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl py-2 z-20 border border-white/20 text-gray-800 animate-in fade-in zoom-in-95 duration-200">
+                                <div className="absolute right-0 mt-2 w-48 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl py-2 z-20 border border-white/20 dark:border-gray-700 text-gray-800 dark:text-gray-200 animate-in fade-in zoom-in-95 duration-200">
                                     <button
                                         onClick={() => { onEdit(account); setIsMenuOpen(false); }}
-                                        className="w-full px-4 py-2.5 text-left text-sm font-medium hover:bg-gray-50 flex items-center gap-2"
+                                        className="w-full px-4 py-2.5 text-left text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors"
                                     >
-                                        <Edit2 className="w-4 h-4 text-blue-500" /> Edit Account
+                                        <Edit2 className="w-4 h-4 text-blue-500 dark:text-blue-400" /> Edit Account
                                     </button>
                                     <button
                                         onClick={() => { navigator.clipboard.writeText(balance.toString()); setIsMenuOpen(false); }}
-                                        className="w-full px-4 py-2.5 text-left text-sm font-medium hover:bg-gray-50 flex items-center gap-2"
+                                        className="w-full px-4 py-2.5 text-left text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors"
                                     >
-                                        <Copy className="w-4 h-4 text-gray-500" /> Copy Balance
+                                        <Copy className="w-4 h-4 text-gray-500 dark:text-gray-400" /> Copy Balance
                                     </button>
-                                    <div className="my-1 border-t border-gray-100" />
+                                    <div className="my-1 border-t border-gray-100 dark:border-gray-700" />
                                     <button
                                         onClick={() => { onDelete(account.id); setIsMenuOpen(false); }}
-                                        className="w-full px-4 py-2.5 text-left text-sm font-medium hover:bg-red-50 text-red-600 flex items-center gap-2"
+                                        className="w-full px-4 py-2.5 text-left text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center gap-2 transition-colors"
                                     >
                                         <Trash2 className="w-4 h-4" /> Delete
                                     </button>

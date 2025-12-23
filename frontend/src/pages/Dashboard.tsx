@@ -101,39 +101,39 @@ const Dashboard: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50/50 pb-12">
+            <div className="min-h-screen bg-gray-50/50 dark:bg-gray-900 pb-12 transition-colors duration-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                         <div>
-                            <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-1">
                                 <Calendar className="w-4 h-4" />
                                 <span>{currentDate}</span>
                             </div>
-                            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                                Welcome back, <span className="text-blue-600">{user?.full_name || 'User'}</span>
+                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+                                Welcome back, <span className="text-blue-600 dark:text-blue-400">{user?.full_name || 'User'}</span>
                             </h1>
-                            <p className="text-gray-500 mt-1">Here's what's happening with your finance today.</p>
+                            <p className="text-gray-500 dark:text-gray-400 mt-1">Here's what's happening with your finance today.</p>
                         </div>
 
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={handleRefresh}
-                                className="p-2.5 text-gray-500 hover:text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all shadow-sm"
+                                className="p-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm"
                                 title="Refresh Data"
                             >
                                 <RefreshCw className={`w-5 h-5 ${isStatsFetching ? 'animate-spin' : ''}`} />
                             </button>
                             <button
                                 onClick={() => setIsImportModalOpen(true)}
-                                className="inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all shadow-sm"
+                                className="inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm"
                             >
-                                <Upload className="w-4 h-4 mr-2 text-gray-500" />
+                                <Upload className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" />
                                 Import
                             </button>
                             <button
                                 onClick={() => setIsExportModalOpen(true)}
-                                className="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-xl shadow-lg transition-all"
+                                className="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-xl shadow-lg transition-all"
                             >
                                 <Download className="w-4 h-4 mr-2" />
                                 Export Payload
@@ -157,10 +157,10 @@ const Dashboard: React.FC = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             {/* Analytics (2/3 width) */}
                             <div className="lg:col-span-2 space-y-8">
-                                <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                                <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
                                     <div className="flex items-center justify-between mb-6">
-                                        <h3 className="text-lg font-bold text-gray-900">Spending Analysis</h3>
-                                        <button className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center">
+                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">Spending Analysis</h3>
+                                        <button className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center">
                                             View Report <ChevronRight className="w-4 h-4 ml-1" />
                                         </button>
                                     </div>
@@ -174,42 +174,42 @@ const Dashboard: React.FC = () => {
 
                             {/* Recent Transactions / Quick Overview (1/3 width) */}
                             <div className="space-y-8">
-                                <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 h-full">
+                                <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 h-full transition-colors">
                                     <div className="flex items-center justify-between mb-6">
-                                        <h3 className="text-lg font-bold text-gray-900">Recent Activity</h3>
-                                        <button className="text-sm font-medium text-blue-600 hover:text-blue-700">See All</button>
+                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">Recent Activity</h3>
+                                        <button className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">See All</button>
                                     </div>
 
                                     <div className="space-y-4">
                                         {recentTransactions?.map((tx) => (
-                                            <div key={tx.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer group">
+                                            <div key={tx.id} className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors cursor-pointer group">
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${tx.transaction_type === 'income' ? 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100' : 'bg-rose-50 text-rose-600 group-hover:bg-rose-100'
+                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${tx.transaction_type === 'income' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50' : 'bg-rose-50 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 group-hover:bg-rose-100 dark:group-hover:bg-rose-900/50'
                                                         }`}>
                                                         <span className="text-xs font-bold">
                                                             {tx.transaction_type === 'income' ? 'IN' : 'EXP'}
                                                         </span>
                                                     </div>
                                                     <div>
-                                                        <p className="text-sm font-semibold text-gray-900">{tx.description}</p>
-                                                        <p className="text-xs text-gray-500">
+                                                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{tx.description}</p>
+                                                        <p className="text-xs text-gray-500 dark:text-gray-400">
                                                             {new Date(tx.transaction_date).toLocaleDateString()}
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <span className={`text-sm font-bold ${tx.transaction_type === 'income' ? 'text-emerald-600' : 'text-gray-900'
+                                                <span className={`text-sm font-bold ${tx.transaction_type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-gray-100'
                                                     }`}>
                                                     {tx.transaction_type === 'income' ? '+' : '-'}{formatCurrency(parseFloat(tx.amount), currency)}
                                                 </span>
                                             </div>
                                         )) || (
-                                                <div className="text-center py-8 text-gray-400">
+                                                <div className="text-center py-8 text-gray-400 dark:text-gray-500">
                                                     No recent transactions
                                                 </div>
                                             )}
 
-                                        <div className="pt-4 border-t border-gray-50 flex justify-center">
-                                            <p className="text-xs text-gray-400">Showing last 5 transactions</p>
+                                        <div className="pt-4 border-t border-gray-50 dark:border-gray-700 flex justify-center">
+                                            <p className="text-xs text-gray-400 dark:text-gray-500">Showing last 5 transactions</p>
                                         </div>
                                     </div>
                                 </div>

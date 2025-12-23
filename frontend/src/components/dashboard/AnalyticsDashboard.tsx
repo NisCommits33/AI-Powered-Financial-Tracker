@@ -31,8 +31,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 }) => {
     return (
         <div className="space-y-6">
-            <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-lg font-medium leading-6 text-gray-900 mb-4">Spending by Category</h3>
+            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 transition-colors">
+                <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white mb-4">Spending by Category</h3>
                 <div className="h-80">
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
@@ -50,7 +50,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                                     <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>
-                            <Tooltip />
+                            <Tooltip contentStyle={{ backgroundColor: 'rgb(31, 41, 55)', color: '#fff', border: 'none' }} itemStyle={{ color: '#fff' }} />
                             <Legend />
                         </PieChart>
                     </ResponsiveContainer>
@@ -58,8 +58,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             </div>
 
             {/* Monthly Trends Chart */}
-            <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-lg font-medium leading-6 text-gray-900 mb-4">Monthly Trends</h3>
+            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 transition-colors">
+                <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white mb-4">Monthly Trends</h3>
                 <div className="h-80">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart
@@ -71,14 +71,16 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                                 bottom: 5,
                             }}
                         >
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="month" />
-                            <YAxis />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.2} />
+                            <XAxis dataKey="month" stroke="#9ca3af" tick={{ fill: '#9ca3af' }} />
+                            <YAxis stroke="#9ca3af" tick={{ fill: '#9ca3af' }} />
                             <Tooltip
                                 formatter={(value: number) => [formatCurrency(value, currency), undefined]}
-                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', backgroundColor: 'rgb(31, 41, 55)', color: '#fff' }}
+                                itemStyle={{ color: '#fff' }}
+                                cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
                             />
-                            <Legend />
+                            <Legend wrapperStyle={{ paddingTop: '20px' }} />
                             <Bar dataKey="income" name="Income" fill="#10b981" radius={[4, 4, 0, 0]} />
                             <Bar dataKey="expense" name="Expense" fill="#f43f5e" radius={[4, 4, 0, 0]} />
                         </BarChart>

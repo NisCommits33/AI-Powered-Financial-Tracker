@@ -42,22 +42,22 @@ const Budgets: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50/50">
+            <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950 transition-colors">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="space-y-8">
                         {/* Header */}
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div>
-                                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
+                                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
                                     Budgets
                                 </h1>
-                                <p className="text-gray-500 mt-1">
+                                <p className="text-gray-500 dark:text-gray-400 mt-1">
                                     Track your spending and save more money.
                                 </p>
                             </div>
                             <button
                                 onClick={() => setIsFormOpen(true)}
-                                className="flex items-center gap-2 px-4 py-2.5 bg-black text-white rounded-xl hover:bg-gray-800 transition-all shadow-lg shadow-gray-200 font-medium"
+                                className="flex items-center gap-2 px-4 py-2.5 bg-black hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 rounded-xl transition-all shadow-lg shadow-gray-200 dark:shadow-none font-medium"
                             >
                                 <Plus className="w-4 h-4" />
                                 <span>New Budget</span>

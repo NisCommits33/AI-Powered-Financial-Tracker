@@ -40,12 +40,12 @@ const BudgetList: React.FC<BudgetListProps> = ({ budgets, onDelete, isLoading })
     // Empty State
     if (budgets.length === 0) {
         return (
-            <div className="bg-white rounded-3xl p-12 text-center shadow-sm border border-gray-100 flex flex-col items-center justify-center min-h-[400px]">
-                <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6">
-                    <Wallet className="w-10 h-10 text-blue-500" />
+            <div className="bg-white dark:bg-gray-800 rounded-3xl p-12 text-center shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col items-center justify-center min-h-[400px]">
+                <div className="w-20 h-20 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-6">
+                    <Wallet className="w-10 h-10 text-blue-500 dark:text-blue-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">No budgets set</h3>
-                <p className="text-gray-500 max-w-sm mx-auto mb-8">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No budgets set</h3>
+                <p className="text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-8">
                     Create a budget to track your spending and save more money this month.
                 </p>
             </div>
@@ -68,7 +68,7 @@ const BudgetList: React.FC<BudgetListProps> = ({ budgets, onDelete, isLoading })
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* Total Budget */}
-                <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-6 text-white shadow-lg shadow-blue-500/20 relative overflow-hidden group">
+                <div className="bg-gradient-to-br from-blue-600 to-indigo-700 dark:from-blue-700 dark:to-indigo-800 rounded-3xl p-6 text-white shadow-lg shadow-blue-500/20 dark:shadow-blue-900/20 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                         <Wallet className="w-24 h-24 transform rotate-12" />
                     </div>
@@ -82,62 +82,62 @@ const BudgetList: React.FC<BudgetListProps> = ({ budgets, onDelete, isLoading })
                 </div>
 
                 {/* Total Spent */}
-                <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all duration-300">
-                    <div className="absolute top-4 right-4 p-2 bg-gray-50 rounded-2xl group-hover:bg-gray-100 transition-colors">
-                        <TrendingDown className="w-6 h-6 text-gray-400 group-hover:text-gray-600" />
+                <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                    <div className="absolute top-4 right-4 p-2 bg-gray-50 dark:bg-gray-700 rounded-2xl group-hover:bg-gray-100 dark:group-hover:bg-gray-600 transition-colors">
+                        <TrendingDown className="w-6 h-6 text-gray-400 dark:text-gray-300 group-hover:text-gray-600 dark:group-hover:text-gray-200" />
                     </div>
                     <div>
-                        <p className="text-gray-500 font-medium mb-1">Total Spent</p>
-                        <h3 className="text-3xl font-bold text-gray-900">${totalSpent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h3>
+                        <p className="text-gray-500 dark:text-gray-400 font-medium mb-1">Total Spent</p>
+                        <h3 className="text-3xl font-bold text-gray-900 dark:text-white">${totalSpent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h3>
                         <div className="mt-4 flex items-center gap-2">
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                                 <div
-                                    className="h-full bg-gray-900 rounded-full transition-all duration-500"
+                                    className="h-full bg-gray-900 dark:bg-gray-200 rounded-full transition-all duration-500"
                                     style={{ width: `${Math.min(overallPercentage, 100)}%` }}
                                 />
                             </div>
-                            <span className="text-xs font-bold text-gray-600">{overallPercentage.toFixed(0)}%</span>
+                            <span className="text-xs font-bold text-gray-600 dark:text-gray-300">{overallPercentage.toFixed(0)}%</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Remaining */}
-                <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group hover:shadow-md transition-all duration-300">
                     <div>
-                        <p className="text-gray-500 font-medium mb-1">Remaining</p>
-                        <h3 className={`text-3xl font-bold ${totalRemaining >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        <p className="text-gray-500 dark:text-gray-400 font-medium mb-1">Remaining</p>
+                        <h3 className={`text-3xl font-bold ${totalRemaining >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                             ${Math.abs(totalRemaining).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                         </h3>
-                        <p className={`text-sm mt-1 font-medium ${totalRemaining >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        <p className={`text-sm mt-1 font-medium ${totalRemaining >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                             {totalRemaining >= 0 ? 'Safe to spend' : 'Over budget'}
                         </p>
                     </div>
                 </div>
 
                 {/* Status Overview */}
-                <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-                    <h3 className="text-gray-500 font-medium mb-4">Health Check</h3>
+                <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300">
+                    <h3 className="text-gray-500 dark:text-gray-400 font-medium mb-4">Health Check</h3>
                     <div className="space-y-3">
-                        <div className="flex items-center justify-between p-2 rounded-xl bg-emerald-50 text-emerald-700">
+                        <div className="flex items-center justify-between p-2 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300">
                             <div className="flex items-center gap-2">
                                 <CheckCircle className="w-4 h-4" />
                                 <span className="text-sm font-semibold">On Track</span>
                             </div>
-                            <span className="text-sm font-bold bg-white px-2 py-0.5 rounded-lg shadow-sm">{onTrackCount}</span>
+                            <span className="text-sm font-bold bg-white dark:bg-gray-700 px-2 py-0.5 rounded-lg shadow-sm">{onTrackCount}</span>
                         </div>
-                        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-50 text-amber-700">
+                        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300">
                             <div className="flex items-center gap-2">
                                 <AlertTriangle className="w-4 h-4" />
                                 <span className="text-sm font-semibold">Warning</span>
                             </div>
-                            <span className="text-sm font-bold bg-white px-2 py-0.5 rounded-lg shadow-sm">{warningCount}</span>
+                            <span className="text-sm font-bold bg-white dark:bg-gray-700 px-2 py-0.5 rounded-lg shadow-sm">{warningCount}</span>
                         </div>
-                        <div className="flex items-center justify-between p-2 rounded-xl bg-rose-50 text-rose-700">
+                        <div className="flex items-center justify-between p-2 rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300">
                             <div className="flex items-center gap-2">
                                 <AlertTriangle className="w-4 h-4" />
                                 <span className="text-sm font-semibold">Exceeded</span>
                             </div>
-                            <span className="text-sm font-bold bg-white px-2 py-0.5 rounded-lg shadow-sm">{exceededCount}</span>
+                            <span className="text-sm font-bold bg-white dark:bg-gray-700 px-2 py-0.5 rounded-lg shadow-sm">{exceededCount}</span>
                         </div>
                     </div>
                 </div>

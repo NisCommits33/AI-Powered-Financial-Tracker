@@ -140,7 +140,7 @@ const Register: React.FC = () => {
             </div>
 
             {/* Right Panel - Registration Form */}
-            <div className="flex-1 flex flex-col justify-center p-8 bg-white overflow-y-auto">
+            <div className="flex-1 flex flex-col justify-center p-8 bg-white dark:bg-gray-900 transition-colors duration-200 overflow-y-auto">
                 <div className="mx-auto w-full max-w-md">
                     {/* Mobile header */}
                     <div className="lg:hidden mb-8">
@@ -148,30 +148,30 @@ const Register: React.FC = () => {
                             <div className="p-2.5 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl">
                                 <Sparkles className="w-6 h-6 text-white" />
                             </div>
-                            <div className="text-xl font-bold text-gray-900">Join Finance Dashboard</div>
+                            <div className="text-xl font-bold text-gray-900 dark:text-white">Join Finance Dashboard</div>
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">Create your account</h2>
-                        <p className="text-gray-500 mt-1">Start your financial journey with us</p>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create your account</h2>
+                        <p className="text-gray-500 dark:text-gray-400 mt-1">Start your financial journey with us</p>
                     </div>
 
                     {/* Desktop header */}
                     <div className="hidden lg:block mb-10">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Create your account</h2>
-                        <p className="text-gray-500">Join thousands managing their finances smarter</p>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Create your account</h2>
+                        <p className="text-gray-500 dark:text-gray-400">Join thousands managing their finances smarter</p>
                     </div>
 
                     {/* Form Card */}
                     <div className="space-y-8">
                         {error && (
                             <div className="animate-in slide-in-from-top duration-300">
-                                <div className="p-4 rounded-xl bg-red-50 border border-red-100">
+                                <div className="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800">
                                     <div className="flex items-start gap-3">
-                                        <div className="p-2 bg-red-100 rounded-lg">
-                                            <Lock className="w-5 h-5 text-red-600" />
+                                        <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
+                                            <Lock className="w-5 h-5 text-red-600 dark:text-red-400" />
                                         </div>
                                         <div className="flex-1">
-                                            <div className="font-medium text-red-900">Registration error</div>
-                                            <div className="text-sm text-red-700 mt-1">{getErrorMessage(error)}</div>
+                                            <div className="font-medium text-red-900 dark:text-red-200">Registration error</div>
+                                            <div className="text-sm text-red-700 dark:text-red-300 mt-1">{getErrorMessage(error)}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -181,10 +181,10 @@ const Register: React.FC = () => {
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                             {/* Full Name Field */}
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-700 flex items-center justify-between">
+                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center justify-between">
                                     <span>Full Name</span>
                                     {errors.full_name && (
-                                        <span className="text-sm font-normal text-red-600 animate-in fade-in">
+                                        <span className="text-sm font-normal text-red-600 dark:text-red-400 animate-in fade-in">
                                             Required field
                                         </span>
                                     )}
@@ -205,12 +205,12 @@ const Register: React.FC = () => {
                                         autoComplete="name"
                                         onFocus={() => setIsFocused(f => ({ ...f, full_name: true }))}
                                         onBlur={() => setIsFocused(f => ({ ...f, full_name: false }))}
-                                        className={`w-full pl-11 pr-4 py-3.5 text-gray-900 placeholder-gray-400 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200
+                                        className={`w-full pl-11 pr-4 py-3.5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-800 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200
                                             ${errors.full_name
-                                                ? 'border-red-300 focus:border-red-400 focus:ring-red-100'
+                                                ? 'border-red-300 dark:border-red-700 focus:border-red-400 focus:ring-red-100 dark:focus:ring-red-900/30'
                                                 : isFocused.full_name
-                                                    ? 'border-green-300 focus:border-green-400 focus:ring-green-100'
-                                                    : 'border-gray-200 hover:border-gray-300 focus:border-green-400 focus:ring-green-100'
+                                                    ? 'border-green-300 dark:border-green-700 focus:border-green-400 focus:ring-green-100 dark:focus:ring-green-900/30'
+                                                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 focus:border-green-400 focus:ring-green-100'
                                             }`}
                                     />
                                 </div>
@@ -218,10 +218,10 @@ const Register: React.FC = () => {
 
                             {/* Email Field */}
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-700 flex items-center justify-between">
+                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center justify-between">
                                     <span>Email address</span>
                                     {errors.email && (
-                                        <span className="text-sm font-normal text-red-600 animate-in fade-in">
+                                        <span className="text-sm font-normal text-red-600 dark:text-red-400 animate-in fade-in">
                                             Required field
                                         </span>
                                     )}
@@ -242,12 +242,12 @@ const Register: React.FC = () => {
                                         autoComplete="email"
                                         onFocus={() => setIsFocused(f => ({ ...f, email: true }))}
                                         onBlur={() => setIsFocused(f => ({ ...f, email: false }))}
-                                        className={`w-full pl-11 pr-4 py-3.5 text-gray-900 placeholder-gray-400 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200
+                                        className={`w-full pl-11 pr-4 py-3.5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-800 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200
                                             ${errors.email
-                                                ? 'border-red-300 focus:border-red-400 focus:ring-red-100'
+                                                ? 'border-red-300 dark:border-red-700 focus:border-red-400 focus:ring-red-100 dark:focus:ring-red-900/30'
                                                 : isFocused.email
-                                                    ? 'border-green-300 focus:border-green-400 focus:ring-green-100'
-                                                    : 'border-gray-200 hover:border-gray-300 focus:border-green-400 focus:ring-green-100'
+                                                    ? 'border-green-300 dark:border-green-700 focus:border-green-400 focus:ring-green-100 dark:focus:ring-green-900/30'
+                                                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 focus:border-green-400 focus:ring-green-100'
                                             }`}
                                     />
                                 </div>
@@ -256,14 +256,14 @@ const Register: React.FC = () => {
                             {/* Password Field with Strength Indicator */}
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <label className="text-sm font-medium text-gray-700">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Password
                                     </label>
-                                    <div className="text-xs font-medium text-gray-500">
-                                        Strength: <span className={`font-bold ${passwordStrength >= 4 ? 'text-green-600' :
-                                                passwordStrength >= 3 ? 'text-yellow-600' :
-                                                    passwordStrength >= 2 ? 'text-orange-600' :
-                                                        'text-red-600'
+                                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                        Strength: <span className={`font-bold ${passwordStrength >= 4 ? 'text-green-600 dark:text-green-400' :
+                                            passwordStrength >= 3 ? 'text-yellow-600 dark:text-yellow-400' :
+                                                passwordStrength >= 2 ? 'text-orange-600 dark:text-orange-400' :
+                                                    'text-red-600 dark:text-red-400'
                                             }`}>
                                             {passwordStrength >= 4 ? 'Strong' :
                                                 passwordStrength >= 3 ? 'Good' :
@@ -288,12 +288,12 @@ const Register: React.FC = () => {
                                         autoComplete="new-password"
                                         onFocus={() => setIsFocused(f => ({ ...f, password: true }))}
                                         onBlur={() => setIsFocused(f => ({ ...f, password: false }))}
-                                        className={`w-full pl-11 pr-12 py-3.5 text-gray-900 placeholder-gray-400 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200
+                                        className={`w-full pl-11 pr-12 py-3.5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-800 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200
                                             ${errors.password
-                                                ? 'border-red-300 focus:border-red-400 focus:ring-red-100'
+                                                ? 'border-red-300 dark:border-red-700 focus:border-red-400 focus:ring-red-100 dark:focus:ring-red-900/30'
                                                 : isFocused.password
-                                                    ? 'border-green-300 focus:border-green-400 focus:ring-green-100'
-                                                    : 'border-gray-200 hover:border-gray-300 focus:border-green-400 focus:ring-green-100'
+                                                    ? 'border-green-300 dark:border-green-700 focus:border-green-400 focus:ring-green-100 dark:focus:ring-green-900/30'
+                                                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 focus:border-green-400 focus:ring-green-100'
                                             }`}
                                     />
 
@@ -303,21 +303,21 @@ const Register: React.FC = () => {
                                         className="absolute inset-y-0 right-0 pr-3.5 flex items-center"
                                     >
                                         {showPassword.password ? (
-                                            <EyeOff className="w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors" />
+                                            <EyeOff className="w-5 h-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
                                         ) : (
-                                            <Eye className="w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors" />
+                                            <Eye className="w-5 h-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
                                         )}
                                     </button>
                                 </div>
 
                                 {/* Password Strength Bar */}
-                                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                                     <div
                                         className={`h-full transition-all duration-500 ${passwordStrength >= 4 ? 'w-full bg-green-500' :
-                                                passwordStrength >= 3 ? 'w-3/4 bg-yellow-500' :
-                                                    passwordStrength >= 2 ? 'w-1/2 bg-orange-500' :
-                                                        passwordStrength >= 1 ? 'w-1/4 bg-red-500' :
-                                                            'w-0 bg-transparent'
+                                            passwordStrength >= 3 ? 'w-3/4 bg-yellow-500' :
+                                                passwordStrength >= 2 ? 'w-1/2 bg-orange-500' :
+                                                    passwordStrength >= 1 ? 'w-1/4 bg-red-500' :
+                                                        'w-0 bg-transparent'
                                             }`}
                                     />
                                 </div>
@@ -327,12 +327,12 @@ const Register: React.FC = () => {
                                     {requirements.map(req => (
                                         <div key={req.id} className="flex items-center gap-2 text-sm">
                                             <div className={`w-4 h-4 rounded-full flex items-center justify-center ${req.met
-                                                    ? 'bg-green-100 text-green-600'
-                                                    : 'bg-gray-100 text-gray-400'
+                                                ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400'
+                                                : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
                                                 }`}>
                                                 {req.met && <Check className="w-3 h-3" />}
                                             </div>
-                                            <span className={req.met ? 'text-green-600' : 'text-gray-500'}>
+                                            <span className={req.met ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}>
                                                 {req.label}
                                             </span>
                                         </div>
@@ -342,10 +342,10 @@ const Register: React.FC = () => {
 
                             {/* Confirm Password Field */}
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-700 flex items-center justify-between">
+                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center justify-between">
                                     <span>Confirm Password</span>
                                     {password && confirmPassword && password === confirmPassword && (
-                                        <span className="text-sm font-normal text-green-600 animate-in fade-in">
+                                        <span className="text-sm font-normal text-green-600 dark:text-green-400 animate-in fade-in">
                                             Passwords match
                                         </span>
                                     )}
@@ -354,10 +354,10 @@ const Register: React.FC = () => {
                                 <div className={`relative transition-all duration-200 ${isFocused.confirm_password ? 'scale-[1.01]' : ''}`}>
                                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                         <Lock className={`w-5 h-5 transition-colors ${errors.confirm_password
-                                                ? 'text-red-400'
-                                                : isFocused.confirm_password
-                                                    ? password === confirmPassword ? 'text-green-500' : 'text-yellow-500'
-                                                    : 'text-gray-400'
+                                            ? 'text-red-400'
+                                            : isFocused.confirm_password
+                                                ? password === confirmPassword ? 'text-green-500' : 'text-yellow-500'
+                                                : 'text-gray-400'
                                             }`} />
                                     </div>
 
@@ -371,14 +371,14 @@ const Register: React.FC = () => {
                                         autoComplete="new-password"
                                         onFocus={() => setIsFocused(f => ({ ...f, confirm_password: true }))}
                                         onBlur={() => setIsFocused(f => ({ ...f, confirm_password: false }))}
-                                        className={`w-full pl-11 pr-12 py-3.5 text-gray-900 placeholder-gray-400 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200
+                                        className={`w-full pl-11 pr-12 py-3.5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-800 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200
                                             ${errors.confirm_password
-                                                ? 'border-red-300 focus:border-red-400 focus:ring-red-100'
+                                                ? 'border-red-300 dark:border-red-700 focus:border-red-400 focus:ring-red-100 dark:focus:ring-red-900/30'
                                                 : isFocused.confirm_password
                                                     ? password === confirmPassword
-                                                        ? 'border-green-300 focus:border-green-400 focus:ring-green-100'
-                                                        : 'border-yellow-300 focus:border-yellow-400 focus:ring-yellow-100'
-                                                    : 'border-gray-200 hover:border-gray-300 focus:border-green-400 focus:ring-green-100'
+                                                        ? 'border-green-300 dark:border-green-700 focus:border-green-400 focus:ring-green-100 dark:focus:ring-green-900/30'
+                                                        : 'border-yellow-300 dark:border-yellow-700 focus:border-yellow-400 focus:ring-yellow-100 dark:focus:ring-yellow-900/30'
+                                                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 focus:border-green-400 focus:ring-green-100'
                                             }`}
                                     />
 
@@ -388,15 +388,15 @@ const Register: React.FC = () => {
                                         className="absolute inset-y-0 right-0 pr-3.5 flex items-center"
                                     >
                                         {showPassword.confirm ? (
-                                            <EyeOff className="w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors" />
+                                            <EyeOff className="w-5 h-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
                                         ) : (
-                                            <Eye className="w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors" />
+                                            <Eye className="w-5 h-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
                                         )}
                                     </button>
                                 </div>
 
                                 {errors.confirm_password && (
-                                    <div className="mt-2 flex items-center text-red-600 text-sm">
+                                    <div className="mt-2 flex items-center text-red-600 dark:text-red-400 text-sm">
                                         <div className="w-4 h-4 mr-2">⚠️</div>
                                         {errors.confirm_password.message}
                                     </div>
@@ -404,19 +404,19 @@ const Register: React.FC = () => {
                             </div>
 
                             {/* Terms Agreement */}
-                            <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-100">
+                            <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
                                 <input
                                     type="checkbox"
                                     id="terms"
-                                    className="mt-1 w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                    className="mt-1 w-4 h-4 text-blue-600 bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
                                 />
-                                <label htmlFor="terms" className="text-sm text-gray-600">
+                                <label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-300">
                                     I agree to the{' '}
-                                    <a href="#" className="font-medium text-blue-600 hover:text-blue-700">
+                                    <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700">
                                         Terms of Service
                                     </a>{' '}
                                     and{' '}
-                                    <a href="#" className="font-medium text-blue-600 hover:text-blue-700">
+                                    <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700">
                                         Privacy Policy
                                     </a>
                                 </label>
@@ -428,8 +428,8 @@ const Register: React.FC = () => {
                                 disabled={isLoading || !isDirty || !isValid}
                                 className={`w-full py-4 px-4 rounded-xl font-medium text-white transition-all duration-300 transform active:scale-[0.99]
                                     ${isLoading || !isDirty || !isValid
-                                        ? 'bg-gray-300 cursor-not-allowed'
-                                        : 'bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 shadow-lg hover:shadow-xl active:shadow-lg'
+                                        ? 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed'
+                                        : 'bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 shadow-lg hover:shadow-xl active:shadow-lg dark:shadow-blue-900/20'
                                     }`}
                             >
                                 <div className="flex items-center justify-center">
@@ -449,18 +449,18 @@ const Register: React.FC = () => {
                         </form>
 
                         {/* Sign In Link */}
-                        <div className="pt-6 border-t border-gray-100 text-center">
-                            <p className="text-gray-600 text-sm">
+                        <div className="pt-6 border-t border-gray-100 dark:border-gray-700 text-center">
+                            <p className="text-gray-600 dark:text-gray-400 text-sm">
                                 Already have an account?{' '}
                                 <Link
                                     to="/login"
-                                    className="font-semibold text-green-600 hover:text-green-700 transition-colors inline-flex items-center group"
+                                    className="font-semibold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors inline-flex items-center group"
                                 >
                                     Sign in here
                                     <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             </p>
-                            <p className="text-center text-xs text-gray-400 mt-2">
+                            <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-2">
                                 Get instant access to all features • No credit card required
                             </p>
                         </div>

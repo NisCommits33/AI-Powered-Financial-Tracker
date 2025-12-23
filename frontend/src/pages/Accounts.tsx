@@ -118,26 +118,26 @@ const Accounts: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50/50">
+            <div className="min-h-screen bg-gray-50/50 dark:bg-gray-900 pb-12 transition-colors duration-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
                     {/* Header & Actions */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Financial Overview</h1>
-                            <p className="text-gray-500 mt-1">Track your wealth and manage accounts</p>
+                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Financial Overview</h1>
+                            <p className="text-gray-500 dark:text-gray-400 mt-1">Track your wealth and manage accounts</p>
                         </div>
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => refetch()}
-                                className="p-2.5 text-gray-500 hover:text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all shadow-sm"
+                                className="p-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm"
                                 title="Refresh Data"
                             >
                                 <RefreshCw className={`w-5 h-5 ${isFetching ? 'animate-spin' : ''}`} />
                             </button>
                             <button
                                 onClick={() => setIsFormOpen(true)}
-                                className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg shadow-blue-500/20 transition-all transform hover:-translate-y-0.5"
+                                className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 rounded-xl shadow-lg shadow-blue-500/20 transition-all transform hover:-translate-y-0.5"
                             >
                                 <Plus className="w-5 h-5 mr-2" />
                                 Add Account
@@ -148,7 +148,7 @@ const Accounts: React.FC = () => {
                     {/* Financial Health Dashboard */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                         {/* Net Worth Card */}
-                        <div className="relative overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-6 shadow-xl text-white">
+                        <div className="relative overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 dark:from-gray-950 dark:to-gray-900 rounded-3xl p-6 shadow-xl text-white">
                             <div className="absolute top-0 right-0 p-4 opacity-10">
                                 <TrendingUp className="w-24 h-24 transform rotate-12" />
                             </div>
@@ -177,42 +177,42 @@ const Accounts: React.FC = () => {
                         </div>
 
                         {/* Assets Card */}
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden group hover:border-blue-100 transition-colors">
-                            <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-blue-50 rounded-full blur-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group hover:border-blue-100 dark:hover:border-blue-900 transition-colors">
+                            <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-blue-50 dark:bg-blue-900/20 rounded-full blur-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
                             <div className="relative z-10">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+                                    <div className="p-2.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl">
                                         <ArrowUpRight className="w-6 h-6" />
                                     </div>
-                                    <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Total Assets</span>
+                                    <span className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Assets</span>
                                 </div>
-                                <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                                     {showHiddenStats ? '••••••' : `$${accountMetrics.totalAssets.toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
                                 </h2>
-                                <p className="text-sm text-gray-500">Across investment & savings</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Across investment & savings</p>
                             </div>
                         </div>
 
                         {/* Liabilities Card */}
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden group hover:border-red-100 transition-colors">
-                            <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-red-50 rounded-full blur-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group hover:border-red-100 dark:hover:border-red-900 transition-colors">
+                            <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-red-50 dark:bg-red-900/20 rounded-full blur-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
                             <div className="relative z-10">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <div className="p-2.5 bg-red-50 text-red-600 rounded-xl">
+                                    <div className="p-2.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl">
                                         <ArrowDownRight className="w-6 h-6" />
                                     </div>
-                                    <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Total Liabilities</span>
+                                    <span className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Liabilities</span>
                                 </div>
-                                <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                                     {showHiddenStats ? '••••••' : `$${Math.abs(accountMetrics.totalLiabilities).toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
                                 </h2>
-                                <p className="text-sm text-gray-500">Credit cards & loans</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Credit cards & loans</p>
                             </div>
                         </div>
                     </div>
 
                     {/* Filter Bar */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-8">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-8 transition-colors">
                         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
                             <div className="relative flex-1 w-full">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -223,7 +223,7 @@ const Accounts: React.FC = () => {
                                     placeholder="Search by account name..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                                    className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                                 />
                             </div>
                             <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 hide-scrollbar">
@@ -235,8 +235,8 @@ const Accounts: React.FC = () => {
                                         key={type.value}
                                         onClick={() => setFilterType(type.value)}
                                         className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filterType === type.value
-                                            ? 'bg-gray-900 text-white shadow-md'
-                                            : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                                            ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-md'
+                                            : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
                                             }`}
                                     >
                                         {type.label}

@@ -76,23 +76,23 @@ const Transactions: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50/50">
+            <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950 transition-colors">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="space-y-8">
                         {/* Header Section */}
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div>
-                                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
+                                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
                                     Transactions
                                 </h1>
-                                <p className="text-gray-500 mt-1">
+                                <p className="text-gray-500 dark:text-gray-400 mt-1">
                                     Manage and track your financial activity.
                                 </p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={handleExport}
-                                    className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-all font-medium shadow-sm"
+                                    className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all font-medium shadow-sm"
                                 >
                                     <Download className="w-4 h-4" />
                                     <span>Export CSV</span>
@@ -102,7 +102,7 @@ const Transactions: React.FC = () => {
                                         setEditingTransaction(undefined);
                                         setIsFormOpen(true);
                                     }}
-                                    className="flex items-center gap-2 px-4 py-2.5 bg-black text-white rounded-xl hover:bg-gray-800 transition-all shadow-lg shadow-gray-200 font-medium"
+                                    className="flex items-center gap-2 px-4 py-2.5 bg-black hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 rounded-xl transition-all shadow-lg shadow-gray-200 dark:shadow-none font-medium"
                                 >
                                     <Plus className="w-4 h-4" />
                                     <span>New Transaction</span>
@@ -121,8 +121,8 @@ const Transactions: React.FC = () => {
                                     }}
                                 />
                                 {/* Pagination Info */}
-                                <div className="text-sm text-gray-500">
-                                    Showing <span className="font-medium text-gray-900">{transactionsData?.items.length || 0}</span> transactions
+                                <div className="text-sm text-gray-500 dark:text-gray-400">
+                                    Showing <span className="font-medium text-gray-900 dark:text-white">{transactionsData?.items.length || 0}</span> transactions
                                 </div>
                             </div>
 
@@ -139,17 +139,17 @@ const Transactions: React.FC = () => {
                                     <button
                                         onClick={() => setPage(p => Math.max(1, p - 1))}
                                         disabled={page === 1}
-                                        className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                                        className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors bg-white dark:bg-gray-900"
                                     >
                                         Previous
                                     </button>
-                                    <span className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg border border-gray-100">
+                                    <span className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
                                         Page {page} of {transactionsData.pages}
                                     </span>
                                     <button
                                         onClick={() => setPage(p => Math.min(transactionsData.pages, p + 1))}
                                         disabled={page === transactionsData.pages}
-                                        className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                                        className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors bg-white dark:bg-gray-900"
                                     >
                                         Next
                                     </button>

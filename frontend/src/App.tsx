@@ -1,9 +1,11 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAppSelector } from './store/hooks';
+import { ThemeProvider } from './components/layout/ThemeContext';
 
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 import Transactions from './pages/Transactions';
 import Accounts from './pages/Accounts';
 import Budgets from './pages/Budgets';
@@ -27,65 +29,68 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
 function App() {
     return (
-        <Routes>
-            {/* Public routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+        <ThemeProvider>
+            <Routes>
+                {/* Public routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
 
-            {/* Protected routes */}
-            <Route
-                path="/dashboard"
-                element={
-                    <ProtectedRoute>
-                        <Dashboard />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/transactions"
-                element={
-                    <ProtectedRoute>
-                        <Transactions />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/accounts"
-                element={
-                    <ProtectedRoute>
-                        <Accounts />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/budgets"
-                element={
-                    <ProtectedRoute>
-                        <Budgets />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/profile"
-                element={
-                    <ProtectedRoute>
-                        <Profile />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/categories"
-                element={
-                    <ProtectedRoute>
-                        <Categories />
-                    </ProtectedRoute>
-                }
-            />
+                {/* Protected routes */}
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/transactions"
+                    element={
+                        <ProtectedRoute>
+                            <Transactions />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/accounts"
+                    element={
+                        <ProtectedRoute>
+                            <Accounts />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/budgets"
+                    element={
+                        <ProtectedRoute>
+                            <Budgets />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/categories"
+                    element={
+                        <ProtectedRoute>
+                            <Categories />
+                        </ProtectedRoute>
+                    }
+                />
 
-            {/* Default redirect */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
+                {/* Default redirect */}
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+        </ThemeProvider>
     );
 }
 
